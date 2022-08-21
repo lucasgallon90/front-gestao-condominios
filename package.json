@@ -1,0 +1,67 @@
+{
+  "name": "front-gestao-de-condominios",
+  "version": "1.0.0",
+  "description": "FRONT - TCC - DESENVOLVIMENTO WEB FULL STACK - PUC MINAS - LUCAS GALLON",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasgallon90/front-gestao-condominios.git"
+  },
+  "author": "Lucas Gallon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucasgallon90/front-gestao-condominios/issues"
+  },
+  "private": false,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export",
+    "test": "cypress open",
+    "lint": "next lint",
+    "lint-fix": "next lint --fix"
+  },
+  "dependencies": {
+    "@date-io/date-fns": "^2.14.0",
+    "@emotion/cache": "^11.10.1",
+    "@emotion/react": "^11.5.0",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.3.0",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "@mui/icons-material": "^5.0.5",
+    "@mui/lab": "^5.0.0-alpha.53",
+    "@mui/material": "^5.0.6",
+    "@mui/styles": "^5.0.2",
+    "@mui/x-date-pickers": "^5.0.0-beta.4",
+    "@sentry/react": "^6.17.3",
+    "@sweetalert2/theme-material-ui": "^5.0.8",
+    "axios": "^0.25.0",
+    "chart.js": "^3.5.1",
+    "cypress": "^10.6.0",
+    "date-fns": "^2.25.0",
+    "dotenv": "^16.0.0",
+    "formik": "^2.1.5",
+    "history": "^5.0.0",
+    "js-cookie": "^3.0.1",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.23",
+    "next": "^12.0.3-canary.7",
+    "nookies": "^2.5.2",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-chartjs-2": "^3.0.4",
+    "react-datepicker": "^4.7.0",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.34.0",
+    "react-hot-toast": "^2.3.0",
+    "react-perfect-scrollbar": "^1.5.8",
+    "recharts": "^2.1.9",
+    "sweetalert2": "^11.4.0",
+    "uuid": "^8.3.0",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-next": "12.0.3-canary.7"
+  }
+}
