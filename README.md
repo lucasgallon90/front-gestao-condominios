@@ -1,6 +1,6 @@
 ## Gestão de Condomínio
 
-Frontend do Sistema de Gestão de Caixa para Condomínios, desenvolvido para a disciplina Projeto Integrado da Pós Graduação
+Frontend do Sistema de Gestão de Caixa para Condomínios, desenvolvido para o TCC da Pós Graduação
 de Desenvolvimento Web Full Stack - PUC Minas.
 
 # .ENV
