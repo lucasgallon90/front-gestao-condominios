@@ -1,6 +1,6 @@
 import { Box, Container } from "@mui/material";
 import Head from "next/head";
-import { TiposLeituraListResults } from "src/components/tipos-leitura/tipos-leitura-list-results";
+import { TiposLeituraListResults } from "../components/tipos-leitura/tipos-leitura-list-results";
 import { SearchToolbar } from "../../components/common/search-toolbar";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { tiposLeitura } from "../../__mocks__/tiposLeitura";

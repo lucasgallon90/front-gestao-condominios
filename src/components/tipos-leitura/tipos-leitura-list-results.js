@@ -1,30 +1,22 @@
-import { useState } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import PropTypes from "prop-types";
-import { format } from "date-fns";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
-  Avatar,
   Box,
-  Card,
-  Checkbox,
-  Paper,
+  Card, IconButton, Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow,
-  Typography,
-  IconButton,
-  Tooltip,
+  TableRow, Tooltip
 } from "@mui/material";
-import { getInitials } from "../../utils/get-initials";
 import Router from "next/router";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
-import { formatarMoeda } from "src/utils";
+import { formatarMoeda } from "../../utils";
 
 export const TiposLeituraListResults = ({ tiposLeitura, ...rest }) => {
   const [limit, setLimit] = useState(10);

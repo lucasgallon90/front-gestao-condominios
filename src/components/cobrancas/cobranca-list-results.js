@@ -17,7 +17,7 @@ import Router from "next/router";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { formatarMoeda } from "src/utils";
+import { formatarMoeda } from "../../utils";
 
 export const CobrancaListResults = ({ cobrancas, ...rest }) => {
   const [limit, setLimit] = useState(10);

@@ -19,7 +19,7 @@ import Router from "next/router";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import api from "src/services/api";
+import api from "../../services/api";
 import Swal from "sweetalert2";
 import { Chip } from "../chip";
 

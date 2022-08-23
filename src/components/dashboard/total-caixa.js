@@ -1,8 +1,8 @@
 import InsertChartIcon from "@mui/icons-material/InsertChartOutlined";
 import { Avatar, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import api from "src/services/api";
-import { formatarMoeda } from "src/utils";
+import api from "../../services/api";
+import { formatarMoeda } from "../../utils/index";
 import DialogSaldoInicialCaixa from "./dialog-saldo-caixa-inicial";
 
 export const SaldoDeCaixa = (props) => {

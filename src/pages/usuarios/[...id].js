@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useState, useEffect } from "react";
-import { UsuarioDetails } from "src/components/usuarios/usuario-details";
+import { UsuarioDetails } from "../components/usuarios/usuario-details";
 
 const Usuario = ({ operation, id }) => (
   <>

@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useUser } from "src/contexts/authContext";
+import { useUser } from "../contexts/authContext";
 import * as Yup from "yup";
 import { Google as GoogleIcon } from "../icons/google";
 import nookies from "nookies";

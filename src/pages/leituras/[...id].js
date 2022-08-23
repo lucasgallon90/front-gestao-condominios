@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useState, useEffect } from "react";
-import { LeituraDetails } from "src/components/leituras/leitura-details";
+import { LeituraDetails } from "../components/leituras/leitura-details";
 
 const Leitura = ({ operation, id }) => (
   <>

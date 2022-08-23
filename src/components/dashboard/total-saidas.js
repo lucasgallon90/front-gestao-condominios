@@ -1,8 +1,8 @@
 import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { formatarMoeda } from "src/utils";
+import { formatarMoeda } from "../../utils";
 import { useEffect, useState } from "react";
-import api from "src/services/api";
+import api from "../../services/api";
 
 export const TotalSaidas = (props) => {
   const [totalSaidas, setTotalSaidas] = useState(0);

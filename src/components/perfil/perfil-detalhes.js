@@ -9,7 +9,7 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import api from "src/services/api";
+import api from "../../services/api";
 
 export const PerfilDetalhes = (props) => {
   const [values, setValues] = useState({

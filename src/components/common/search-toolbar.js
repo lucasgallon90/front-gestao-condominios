@@ -9,11 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { format } from "date-fns";
 import Router from "next/router";
-import { exportPDF } from "src/utils/exportPdf";
 import { Download as DownloadIcon } from "../../icons/download";
 import { Search as SearchIcon } from "../../icons/search";
+import { exportPDF } from "../../utils/exportPdf";
 import FilterRadio from "../utils/filterRadio";
 
 const style = {
@@ -28,17 +27,22 @@ const style = {
 
 export const SearchToolbar = ({
   selectedFilter,
-  setSelectedFilter,
+  setSelectedFilter = () => {},
   filterValue,
-  setFilterValue,
+  setFilterValue = () => {},
   list,
   dataExport,
   headExport,
-  filenameExport="export",
+  filenameExport = "export",
   ...props
 }) => {
   function handleClickExportar() {
-    exportPDF({ title: props?.title, head: headExport, data: dataExport, filename: filenameExport });
+    exportPDF({
+      title: props?.title,
+      head: headExport,
+      data: dataExport,
+      filename: filenameExport,
+    });
   }
 
   function handleClickAdicionar() {

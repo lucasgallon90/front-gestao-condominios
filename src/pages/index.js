@@ -1,8 +1,8 @@
 import { Box, Container, Grid } from "@mui/material";
 import Head from "next/head";
 import { parseCookies } from "nookies";
-import { TotalCondominios } from "src/components/dashboard/total-condominios";
-import { TotalUsuarios } from "src/components/dashboard/total-usuarios";
+import { TotalCondominios } from "../components/dashboard/total-condominios";
+import { TotalUsuarios } from "../components/dashboard/total-usuarios";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { SaldoDeCaixa } from "../components/dashboard/total-caixa";
 import { TotalEntradas } from "../components/dashboard/total-entradas";

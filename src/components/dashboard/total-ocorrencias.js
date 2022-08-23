@@ -1,7 +1,7 @@
 import { Avatar, Card, CardContent, Grid, Typography } from "@mui/material";
 import ArticleIcon from "@mui/icons-material/Article";
 import { useEffect, useState } from "react";
-import api from "src/services/api";
+import api from "../../services/api";
 
 export const TotalOcorrencias = (props) => {
   const [totalOcorrencias, setTotalOcorrencias] = useState(0);

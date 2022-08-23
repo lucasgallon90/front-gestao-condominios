@@ -14,7 +14,7 @@ import { format } from "date-fns";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import api from "src/services/api";
+import api from "../../services/api";
 import { Chip } from "../chip";
 
 export const UltimasOcorrencias = (props) => {

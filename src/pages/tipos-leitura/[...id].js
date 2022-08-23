@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useState, useEffect } from "react";
-import { TipoLeituraDetails } from "src/components/tipos-leitura/tipo-leitura-details";
+import { TipoLeituraDetails } from "../components/tipos-leitura/tipo-leitura-details";
 
 const TipoLeitura = ({ operation, id }) => (
   <>

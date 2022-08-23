@@ -1,8 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
+import { CondominioDetails } from "../../components/condominios/condominio-details";
 import { DashboardLayout } from "../../components/dashboard-layout";
-import { useState, useEffect } from "react";
-import { CondominioDetails } from "src/components/condominios/condominio-details";
 
 const Condominio = ({ operation, id }) => (
   <>

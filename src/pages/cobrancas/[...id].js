@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useState, useEffect } from "react";
-import { CobrancaDetails } from "src/components/cobrancas/cobranca-details";
+import { CobrancaDetails } from "../components/cobrancas/cobranca-details";
 
 const Cobranca = ({ operation, id }) => (
   <>

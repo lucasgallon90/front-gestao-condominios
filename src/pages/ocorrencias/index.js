@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import api from "src/services/api";
+import api from "../../services/api";
 import { SearchToolbar } from "../../components/common/search-toolbar";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { OcorrenciaListResults } from "../../components/ocorrencias/ocorrencia-list-results";

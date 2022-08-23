@@ -3,7 +3,7 @@ import { Box, Container } from "@mui/material";
 import { CaixaListResults } from "../components/caixa/caixa-list-results";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { caixa } from "../__mocks__/caixa";
-import { SearchToolbar } from "src/components/common/search-toolbar";
+import { SearchToolbar } from "../components/common/search-toolbar";
 
 const filters = [
   { label: "Descrição", value: "descricao" },

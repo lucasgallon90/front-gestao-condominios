@@ -1,8 +1,8 @@
 import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { useEffect, useState } from "react";
-import api from "src/services/api";
-import { formatarMoeda } from "src/utils";
+import api from "../../services/api";
+import { formatarMoeda } from "../../utils";
 
 export const TotalEntradas = (props) => {
   const [totalEntradas, setTotalEntradas] = useState(0);

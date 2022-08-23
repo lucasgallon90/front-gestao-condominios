@@ -21,7 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
-import { formatarMoeda } from "src/utils";
+import { formatarMoeda } from "../../utils";
 import Router from "next/router";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import EditIcon from "@mui/icons-material/Edit";

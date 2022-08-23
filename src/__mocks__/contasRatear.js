@@ -1,4 +1,4 @@
-import { randomDate } from "src/utils";
+import { randomDate } from "../utils/index.js";
 import { v4 as uuid } from "uuid";
 
 export const contasRatear = [

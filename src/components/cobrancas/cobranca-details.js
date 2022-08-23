@@ -2,19 +2,24 @@ import {
   Box,
   Button,
   Card,
-  CardContent, Divider,
-  Grid, Paper, Table,
+  CardContent,
+  Divider,
+  Grid,
+  Paper,
+  Table,
   TableBody,
   Typography,
   TableCell,
   TableContainer,
-  TableHead, TableRow, TextField
+  TableHead,
+  TableRow,
+  TextField,
 } from "@mui/material";
 import { format } from "date-fns";
 import Router from "next/router";
 import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { cobrancas } from "src/__mocks__/cobrancas";
+import { cobrancas } from "../__mocks__/cobrancas";
 import { formatarMoeda } from "../../utils/index";
 
 export const CobrancaDetails = ({ id, operation, onlyView }) => {
@@ -95,8 +100,8 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                 sx={{ justifyContent: "center", display: "flex", textAlign: "center" }}
                 variant="subtitle1"
               >
-                Selecione o morador e o mês/ano para carregar as
-                contas a ratear e leituras correspondentes
+                Selecione o morador e o mês/ano para carregar as contas a ratear e leituras
+                correspondentes
               </Typography>
             </Grid>
             <Grid item md={6} xs={12}>

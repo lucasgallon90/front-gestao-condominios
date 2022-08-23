@@ -1,5 +1,5 @@
-import { v4 as uuid } from "uuid";
-import { randomDate } from "src/utils";
+import { v4 as uuid } from "../utils/index.js";
+import { randomDate } from "../utils/index.js";
 
 export const tiposMovimentacao = [
   {

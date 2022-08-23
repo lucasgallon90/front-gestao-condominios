@@ -1,8 +1,8 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { setCookie, parseCookies } from "nookies";
 import { useRouter } from "next/router";
-import { recoverUserInformation, signInRequest, registerUser } from "src/services/auth";
-import api from "src/services/api";
+import { recoverUserInformation, signInRequest, registerUser } from "../services/auth";
+import api from "../services/api";
 
 const UserContext = createContext({});
 
@@ -11,7 +11,7 @@ export default function AuthContext({ children }) {
   const router = useRouter();
   const isAuthenticated = !!user;
 
-  async function signIn({email, senha}) {
+  async function signIn({ email, senha }) {
     const result = await signInRequest(email, senha);
     if (!result?.user) {
       return false;

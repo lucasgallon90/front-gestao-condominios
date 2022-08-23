@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useState, useEffect } from "react";
-import { MoradorDetails } from "src/components/moradores/morador-details";
+import { MoradorDetails } from "../components/moradores/morador-details";
 
 const Morador = ({ operation, id }) => (
   <>

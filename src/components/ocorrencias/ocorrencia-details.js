@@ -2,8 +2,8 @@ import { Box, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useUser } from "src/contexts/authContext";
-import api from "src/services/api";
+import { useUser } from "../contexts/authContext";
+import api from "../../services/api";
 import toast from "react-hot-toast";
 
 export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
@@ -31,7 +31,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
         getMoradores();
       } else {
         setValues({ ...values, nome: user.nome, _idUsuarioOcorrencia: user._id });
-        reset();
+        reset(values);
       }
     }
   }, [user]);
@@ -49,7 +49,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
             situacao: res.data.situacao,
             respostaAdmin: res.data.respostaAdmin,
           });
-          reset();
+          reset(values);
       })
       .catch((error) => console.log(error));
   }
@@ -146,7 +146,6 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
                 })}
                 fullWidth
                 disabled={onlyView}
-                // helperText="Por favor insira um nome"
                 label="Motivo"
                 name="motivo"
                 onChange={handleChange}

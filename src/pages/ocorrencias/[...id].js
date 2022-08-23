@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
-import { OcorrenciaDetails } from "src/components/ocorrencias/ocorrencia-details";
+import { OcorrenciaDetails } from "../components/ocorrencias/ocorrencia-details";
 import { DashboardLayout } from "../../components/dashboard-layout";
 
 const Ocorrencia = ({ operation, id }) => (
@@ -22,7 +22,7 @@ const Ocorrencia = ({ operation, id }) => (
           {operation == "view" && "Consulta"} - Ocorrência
         </Typography>
         <Box sx={{ mt: 3 }}>
-          <OcorrenciaDetails operation={operation} id={id} onlyView={operation == "view"} />
+          <OcorrenciaDetails operation={operation} id={id || null} onlyView={operation == "view"} />
         </Box>
       </Container>
     </Box>

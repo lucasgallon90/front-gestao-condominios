@@ -1,39 +1,91 @@
 import { Box, Container } from "@mui/material";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 import { SearchToolbar } from "../../components/common/search-toolbar";
-import { DashboardLayout } from "../../components/dashboard-layout";
 import { CondominioListResults } from "../../components/condominios/condominio-list-results";
-import { condominios } from "../../__mocks__/condominios";
+import { DashboardLayout } from "../../components/dashboard-layout";
+import api from "../../services/api";
 
 const filters = [
-  { label: "Nome", value: "nome" },
-  { label: "Endereço", value: "endereco" },
-  { label: "Cidade", value: "cidade" },
-  { label: "UF", value: "uf" },
+  { label: "Nome", value: "nome", type: "string" },
+  { label: "Endereço", value: "endereco", type: "string" },
+  { label: "Cidade", value: "cidade", type: "string" },
+  { label: "UF", value: "uf", type: "string" },
 ];
 
-const Condominios = () => (
-  <>
-    <Head>
-      <title>Condominios</title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth={false}>
-        <SearchToolbar title="Condomínios" url="condominios" filters={filters} />
+const Condominios = () => {
+  const [condominios, setCondominios] = useState([]);
+  const [filterValue, setFilterValue] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
 
-        <Box sx={{ mt: 3 }}>
-          <CondominioListResults condominios={condominios} />
-        </Box>
-      </Container>
-    </Box>
-  </>
-);
+  useEffect(() => {
+    list();
+  }, []);
+
+  async function list(value) {
+    let filter = null;
+    if (selectedFilter && (value || filterValue))
+      filter = { [selectedFilter]: value || filterValue };
+    await api
+      .post("condominios/list", filter, { params: { limit, page } })
+      .then((res) => {
+        setCondominios(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Condominios</title>
+      </Head>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth={false}>
+          <SearchToolbar
+            url="condominios"
+            title={"Condomínios"}
+            filters={filters}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+            list={list}
+            filenameExport="condominios"
+            dataExport={condominios}
+            headExport={[
+              { label: "Código", key: "codigoCondominio" },
+              { label: "Nome", key: "nome" },
+              { label: "Endereço", key: "endereco" },
+              { label: "Cidade", key: "cidade" },
+              { label: "UF", key: "uf" },
+            ]}
+          />
+
+          <Box sx={{ mt: 3 }}>
+            <CondominioListResults
+              condominios={condominios}
+              page={page - 1}
+              setPage={setPage}
+              limit={limit}
+              setLimit={setLimit}
+              refreshData={list}
+            />
+          </Box>
+        </Container>
+      </Box>
+    </>
+  );
+};
 
 Condominios.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

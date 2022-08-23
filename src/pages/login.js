@@ -16,7 +16,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { Google as GoogleIcon } from "../icons/google";
-import { useUser } from "src/contexts/authContext";
+import { useUser } from "../contexts/authContext";
 import { useEffect, useState } from "react";
 
 const Login = () => {
