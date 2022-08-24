@@ -49,10 +49,6 @@ export const LeituraListResults = ({ leituras, ...rest }) => {
     });
   };
 
-  {
-    console.log(leituras);
-  }
-
   return (
     <Card {...rest}>
       <PerfectScrollbar>
@@ -71,7 +67,11 @@ export const LeituraListResults = ({ leituras, ...rest }) => {
               </TableHead>
               <TableBody>
                 {leituras?.slice(0, limit).map((leitura) => (
-                  <TableRow hover key={leitura._id} onClick={() => handleClickConsultar(leitura._id)}>
+                  <TableRow
+                    hover
+                    key={leitura._id}
+                    onClick={() => handleClickConsultar(leitura._id)}
+                  >
                     <TableCell>{leitura.mesAno}</TableCell>
                     <TableCell>{leitura.morador?.nome}</TableCell>
                     <TableCell>{leitura.leituraAnterior}</TableCell>

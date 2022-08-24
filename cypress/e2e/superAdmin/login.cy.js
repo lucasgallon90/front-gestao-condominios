@@ -1,4 +1,4 @@
-import { usuarios } from "../../src/__mocks__/usuarios";
+import { usuarios } from "../../../src/__mocks__/usuarios";
 describe("Login", () => {
   const usuario = usuarios[0];
   it("Realizar Login", () => {

@@ -17,7 +17,8 @@ export const usuarios = [
   {
     _id: uuid(),
     createdAt: randomDate(new Date(2022, 0, 1), new Date()),
-    email: "joaquimb@gestaodecondominios",
+    email: "morador@gestaodecondominios.com.br",
+    senha: 123,
     nome: "Joaquim B.",
     telefone: "(00) 92323-2500",
     apto: "104",

@@ -42,11 +42,9 @@ const Register = ({ googleId, email }) => {
   });
 
   async function handleSubmitRegister(values, setSubmitting) {
-    const result = await user.register(values);
+    const { confirmacaoSenha, ...rest } = values;
+    const result = await user.register(rest);
     if (!result) {
-      toast.error(
-        "Não foi possível se registrar, verifique se o código do condomínio esta correto"
-      );
       setSubmitting(false);
     } else {
       router.push("/");
