@@ -16,7 +16,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import ptLocale from "date-fns/locale/pt-BR";
 import Router from "next/router";
-import { leituras } from "src/__mocks__/leituras";
+import { leituras } from "../../__mocks__/leituras";
 
 const moradores = [{ id: uuid(), label: "Joaquim" }];
 

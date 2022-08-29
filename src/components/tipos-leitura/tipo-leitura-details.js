@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Router from "next/router";
 import { useState } from "react";
-import { tiposLeitura } from "src/__mocks__/tiposLeitura";
+import { tiposLeitura } from "../../__mocks__/tiposLeitura";
 import { formatarMoeda } from "../../utils";
 
 export const TipoLeituraDetails = ({ id, operation, onlyView }) => {

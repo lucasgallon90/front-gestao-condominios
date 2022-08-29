@@ -3,37 +3,87 @@ import { Box, Container } from "@mui/material";
 import { UsuarioListResults } from "../../components/usuarios/usuario-list-results";
 import { SearchToolbar } from "../../components/common/search-toolbar";
 import { DashboardLayout } from "../../components/dashboard-layout";
-import { usuarios } from "../../__mocks__/usuarios";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
 
 const filters = [
   { label: "Nome", value: "nome" },
-  { label: "Condomínio", value: "condominio" },
+  { label: "Condomínio", value: "nomeCondominio" },
   { label: "Apto", value: "apto" },
   { label: "Email", value: "email", type: "email" },
 ];
 
-const Usuarios = () => (
-  <>
-    <Head>
-      <title>Usuários | Gestão de Condomínios</title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth={false}>
-        <SearchToolbar title="Usuários" url="usuarios" filters={filters} />
+const Usuarios = () => {
+  const [usuarios, setUsuarios] = useState([]);
+  const [filterValue, setFilterValue] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
 
-        <Box sx={{ mt: 3 }}>
-          <UsuarioListResults usuarios={usuarios} />
-        </Box>
-      </Container>
-    </Box>
-  </>
-);
+  useEffect(() => {
+    list();
+  }, []);
+
+  async function list(value) {
+    let filter = null;
+    if (selectedFilter && (value || filterValue))
+      filter = { [selectedFilter]: value || filterValue };
+    await api
+      .post("usuarios/list", filter, { params: { limit, page } })
+      .then((res) => {
+        setUsuarios(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  return (
+    <>
+      <Head>
+        <title>Usuários | Gestão de Condomínios</title>
+      </Head>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth={false}>
+          <SearchToolbar
+            url="usuarios"
+            title={"Usuários"}
+            filters={filters}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+            list={list}
+            filenameExport="usuarios"
+            dataExport={usuarios}
+            headExport={[
+              { label: "Nome", key: "nome" },
+              { label: "Condomínio", key: "condominio" },
+              { label: "Apto", key: "apto" },
+              { label: "Email", key: "email" },
+            ]}
+          />
+
+          <Box sx={{ mt: 3 }}>
+            <UsuarioListResults
+              usuarios={usuarios}
+              page={page - 1}
+              setPage={setPage}
+              limit={limit}
+              setLimit={setLimit}
+              refreshData={list}
+            />
+          </Box>
+        </Container>
+      </Box>
+    </>
+  );
+};
 Usuarios.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Usuarios;

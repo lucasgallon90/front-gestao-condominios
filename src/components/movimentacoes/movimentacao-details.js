@@ -19,7 +19,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { movimentacoes } from "src/__mocks__/movimentacoes";
+import { movimentacoes } from "../../__mocks__/movimentacoes";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { formatarMoeda } from "../../utils/index";
 import { format } from "date-fns";
