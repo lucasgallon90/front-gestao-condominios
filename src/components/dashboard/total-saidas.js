@@ -1,10 +1,11 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardContent, CircularProgress, Grid, Typography } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { formatarMoeda } from "../../utils";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 
 export const TotalSaidas = (props) => {
+  const [loading, setLoading] = useState(true);
   const [totalSaidas, setTotalSaidas] = useState(0);
   useEffect(async () => {
     await api
@@ -12,7 +13,8 @@ export const TotalSaidas = (props) => {
       .then((res) => {
         res.data && setTotalSaidas(res.data.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
   }, []);
   return (
     <Card sx={{ height: "100%" }} {...props}>
@@ -23,7 +25,7 @@ export const TotalSaidas = (props) => {
               SAÍDAS
             </Typography>
             <Typography color="textPrimary" variant="h5">
-              {formatarMoeda(totalSaidas)}
+              {loading ? <CircularProgress size={25} /> : formatarMoeda(totalSaidas)}
             </Typography>
           </Grid>
           <Grid item>

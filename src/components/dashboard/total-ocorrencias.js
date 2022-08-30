@@ -1,9 +1,10 @@
-import { Avatar, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Avatar, Card, CardContent, CircularProgress, Grid, Typography } from "@mui/material";
 import ArticleIcon from "@mui/icons-material/Article";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 
 export const TotalOcorrencias = (props) => {
+  const [loading, setLoading] = useState(true);
   const [totalOcorrencias, setTotalOcorrencias] = useState(0);
 
   useEffect(async () => {
@@ -12,7 +13,8 @@ export const TotalOcorrencias = (props) => {
       .then((res) => {
         res.data && setTotalOcorrencias(res.data.total);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -24,7 +26,7 @@ export const TotalOcorrencias = (props) => {
               OCORRÊNCIAS
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              {totalOcorrencias}
+              {loading ? <CircularProgress size={25} /> : totalOcorrencias}
             </Typography>
           </Grid>
           <Grid item>

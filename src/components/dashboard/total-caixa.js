@@ -1,11 +1,20 @@
 import InsertChartIcon from "@mui/icons-material/InsertChartOutlined";
-import { Avatar, Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { formatarMoeda } from "../../utils/index";
 import DialogSaldoInicialCaixa from "./dialog-saldo-caixa-inicial";
 
 export const SaldoDeCaixa = (props) => {
+  const [loading, setLoading] = useState(true);
   const [openDialogSaldoInicial, setOpenDialogSaldoInicial] = useState(false);
   const [saldoAtual, setSaldoAtual] = useState(0);
 
@@ -15,7 +24,8 @@ export const SaldoDeCaixa = (props) => {
       .then((res) => {
         res.data && setSaldoAtual(res.data.saldoCaixaAtual);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -32,7 +42,7 @@ export const SaldoDeCaixa = (props) => {
                 SALDO CAIXA
               </Typography>
               <Typography color="textPrimary" variant="h5">
-                {formatarMoeda(saldoAtual)}
+                {loading ? <CircularProgress size={25} /> : formatarMoeda(saldoAtual)}
               </Typography>
             </Grid>
             <Grid item>
