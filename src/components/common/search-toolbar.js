@@ -108,7 +108,7 @@ export const SearchToolbar = ({
                   {props?.filters?.find((filter) => filter.value === selectedFilter)?.type ===
                     "date" && (
                     <DatePicker
-                      value={filterValue}
+                      value={filterValue || undefined}
                       onChange={handleChangeDate}
                       renderInput={(params) => <TextField {...params} />}
                     />

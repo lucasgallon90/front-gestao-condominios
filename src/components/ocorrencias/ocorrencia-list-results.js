@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   IconButton,
+  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -23,7 +24,16 @@ import api from "../../services/api";
 import Swal from "sweetalert2";
 import { Chip } from "../chip";
 
-export const OcorrenciaListResults = ({ ocorrencias, refreshData, page, setPage, limit, setLimit, ...rest }) => {
+export const OcorrenciaListResults = ({
+  ocorrencias,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  loading = true,
+  ...rest
+}) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -83,7 +93,16 @@ export const OcorrenciaListResults = ({ ocorrencias, refreshData, page, setPage,
                 {ocorrencias?.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
-                      Nenhum registro encontrado
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
                     </TableCell>
                   </TableRow>
                 )}

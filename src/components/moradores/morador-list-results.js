@@ -3,26 +3,38 @@ import EditIcon from "@mui/icons-material/Edit";
 import {
   Avatar,
   Box,
-  Card, IconButton, Paper,
+  Card,
+  IconButton,
+  LinearProgress,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow, Tooltip, Typography
+  TableRow,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import Router from "next/router";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
+import { formatarTelefone } from "../../utils";
 import { getInitials } from "../../utils/get-initials";
 
-export const MoradorListResults = ({ moradores, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
+export const MoradorListResults = ({
+  moradores,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  loading = true,
+  ...rest
+}) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -47,6 +59,19 @@ export const MoradorListResults = ({ moradores, ...rest }) => {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Deletar",
+    }).then((value) => {
+      if (value.isConfirmed) {
+        api
+          .delete(`usuarios/moradores/delete/${id}`)
+          .then((res) => {
+            toast.success("Registro deletado com sucesso");
+            refreshData();
+          })
+          .catch((error) => {
+            toast.error("Não foi possível deletar o registro");
+            console.log(error);
+          });
+      }
     });
   };
 
@@ -67,7 +92,23 @@ export const MoradorListResults = ({ moradores, ...rest }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {moradores?.slice(0, limit).map((morador) => (
+                {moradores?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
+                {moradores.map((morador) => (
                   <TableRow
                     hover
                     key={morador._id}
@@ -81,9 +122,7 @@ export const MoradorListResults = ({ moradores, ...rest }) => {
                           display: "flex",
                         }}
                       >
-                        <Avatar sx={{ mr: 2 }}>
-                          {getInitials(morador.nome)}
-                        </Avatar>
+                        <Avatar sx={{ mr: 2 }}>{getInitials(morador.nome)}</Avatar>
                         <Typography color="textPrimary" variant="body1">
                           {morador.nome}
                         </Typography>
@@ -92,7 +131,7 @@ export const MoradorListResults = ({ moradores, ...rest }) => {
                     <TableCell>{morador.apto}</TableCell>
                     <TableCell>{morador.bloco}</TableCell>
                     <TableCell>{morador.email}</TableCell>
-                    <TableCell>{morador.telefone}</TableCell>
+                    <TableCell>{formatarTelefone(morador.telefone)}</TableCell>
                     <TableCell>
                       <Tooltip title="Editar">
                         <IconButton

@@ -16,7 +16,6 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
   } = useForm();
   const [values, setValues] = useState({
     nome: undefined,
-    endereco: undefined,
     apto: undefined,
     email: undefined,
     telefone: undefined,

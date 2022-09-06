@@ -11,11 +11,11 @@ const itemsMorador = [
     icon: <ChartBarIcon fontSize="small" />,
     title: "Dashboard",
   },
-  {
-    href: "/cobrancas",
-    icon: <AttachMoneyIcon fontSize="small" />,
-    title: "Cobranças",
-  },
+  // {
+  //   href: "/cobrancas",
+  //   icon: <AttachMoneyIcon fontSize="small" />,
+  //   title: "Cobranças",
+  // },
   {
     href: "/ocorrencias",
     icon: <InsightsIcon fontSize="small" />,
@@ -25,7 +25,6 @@ const itemsMorador = [
     icon: <SettingsIcon fontSize="small" />,
     title: "Configurações",
     items: [
-      
       {
         href: "/perfil",
         icon: <UsersIcon fontSize="small" />,

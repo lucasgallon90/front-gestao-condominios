@@ -5,6 +5,7 @@ import {
   Box,
   Card,
   IconButton,
+  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -14,7 +15,7 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import Router from "next/router";
 import PropTypes from "prop-types";
@@ -22,6 +23,7 @@ import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import api from "../../services/api";
+import { formatarTelefone } from "../../utils";
 import { getInitials } from "../../utils/get-initials";
 
 export const UsuarioListResults = ({
@@ -31,6 +33,7 @@ export const UsuarioListResults = ({
   setPage,
   limit,
   setLimit,
+  loading = true,
   ...rest
 }) => {
   const handleLimitChange = (event) => {
@@ -92,6 +95,22 @@ export const UsuarioListResults = ({
                 </TableRow>
               </TableHead>
               <TableBody>
+                {usuarios?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
                 {usuarios.map((usuario) => (
                   <TableRow
                     hover
@@ -116,7 +135,7 @@ export const UsuarioListResults = ({
                     <TableCell>{usuario.apto}</TableCell>
                     <TableCell>{usuario.bloco}</TableCell>
                     <TableCell>{usuario.email}</TableCell>
-                    <TableCell>{usuario.telefone}</TableCell>
+                    <TableCell>{formatarTelefone(morador.telefone)}</TableCell>
                     <TableCell>
                       {usuario.tipoUsuario === "morador" && "Morador"}
                       {usuario.tipoUsuario === "admin" && "Administrador"}

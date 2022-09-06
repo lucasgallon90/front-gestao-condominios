@@ -8,9 +8,9 @@ import { OcorrenciaListResults } from "../../components/ocorrencias/ocorrencia-l
 import { format } from "date-fns";
 
 const filters = [
-  { label: "Data", value: "createdAt", type: "date" },
   { label: "Morador", value: "nomeMorador", type: "string" },
   { label: "Motivo", value: "motivo", type: "string" },
+  { label: "Data", value: "createdAt", type: "date" },
 ];
 
 const Ocorrencias = () => {
@@ -19,12 +19,14 @@ const Ocorrencias = () => {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     list();
   }, []);
 
   async function list(value) {
+    setLoading(true);
     let filter = null;
     if (selectedFilter && (value || filterValue))
       filter = { [selectedFilter]: value || filterValue };
@@ -35,7 +37,8 @@ const Ocorrencias = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(() => setLoading(false));
   }
 
   return (
@@ -85,6 +88,7 @@ const Ocorrencias = () => {
               limit={limit}
               setLimit={setLimit}
               refreshData={list}
+              loading={loading}
             />
           </Box>
         </Container>
