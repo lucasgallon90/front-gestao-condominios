@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import api from "../../services/api";
 import toast from "react-hot-toast";
 import { TextMaskCustom } from "../common/mask-input";
+import { useUser } from "../../contexts/authContext";
 
 export const UsuarioDetails = ({ id, operation, onlyView }) => {
   const {
@@ -14,6 +15,7 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
     reset,
     formState: { errors },
   } = useForm();
+  const { user } = useUser();
   const [values, setValues] = useState({
     nome: undefined,
     apto: undefined,
@@ -21,6 +23,8 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
     telefone: undefined,
     tipoUsuario: "morador",
     condominio: undefined,
+    confirmacaoSenha: undefined,
+    senha: undefined,
     ativo: true,
   });
   const [condominios, setCondominios] = useState([]);
@@ -33,7 +37,8 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
       }
       if (!onlyView) {
         if (operation === "add") {
-          loadCondominios();
+          const res = await loadCondominios();
+          setValues({ ...values, condominio: res[0] });
         } else {
           usuario?.condominio && setCondominios([usuario.condominio]);
         }
@@ -53,29 +58,18 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
       .catch((error) => console.log(error));
   }
 
-  async function loadCondominios({ nomeCondominio, _idCondominio, usuario }) {
+  async function loadCondominios(nomeCondominio) {
     let filter = null;
-    if (_idCondominio) {
-      await api
-        .get(`condominios/${_idCondominio}`, filter)
-        .then((res) => {
-          setCondominios([res.data]);
-          setValues({ condominio: res.data, ...usuario });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      if (nomeCondominio) filter = { nome: nomeCondominio };
-      await api
-        .post("condominios/list", filter)
-        .then((res) => {
-          setCondominios(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    if (nomeCondominio) filter = { nome: nomeCondominio };
+    return api
+      .post("condominios/list", filter)
+      .then((res) => {
+        setCondominios(res.data);
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   const handleChange = (event) => {
@@ -94,7 +88,12 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
   };
 
   async function onSubmit() {
-    const { condominio, _id, ...rest } = values;
+    const { condominio, _id, confirmacaoSenha, ...rest } = values;
+    if (!condominio) {
+      errors.condominio = true;
+      console.log(errors);
+      return;
+    }
     let requestConfig = {};
     if (operation === "add") {
       requestConfig = {
@@ -153,25 +152,19 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
                 errors={errors.condominio}
                 optionLabel="nome"
                 optionKey="_id"
-                loadOptions={(nomeCondominio) => loadCondominios({ nomeCondominio })}
+                loadOptions={(nomeCondominio) => loadCondominios(nomeCondominio)}
                 handleChangeSelectedValue={handleChangeCondominio}
               ></AutoComplete>
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
-                {...register("apto", {
-                  required: true,
-                })}
                 fullWidth
-                required
                 disabled={onlyView}
                 label="N° Apto"
                 name="apto"
                 onChange={handleChange}
                 value={values.apto || ""}
                 variant="outlined"
-                error={errors.apto ? true : false}
-                helperText={errors.apto ? "Campo obrigatório" : ""}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -219,6 +212,51 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
                 }}
               />
             </Grid>
+            {(!onlyView && operation === "add") && (
+              <>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    {...register("senha", {
+                      required: true,
+                      validate: (data) => (data != values.confirmacaoSenha ? false : true),
+                    })}
+                    fullWidth
+                    label="Senha"
+                    name="senha"
+                    onChange={handleChange}
+                    type="password  "
+                    required={!onlyView && operation === "add"}
+                    value={values.senha}
+                    variant="outlined"
+                    error={errors.senha ? true : false}
+                    helperText={
+                      errors.senha
+                        ? errors.senha != errors.confirmacaoSenha
+                          ? "Senha difere da confirmação"
+                          : "Campo obrigatório"
+                        : ""
+                    }
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    {...register("confirmacaoSenha", {
+                      required: true,
+                    })}
+                    fullWidth
+                    onChange={handleChange}
+                    required={!onlyView && operation === "add"}
+                    label="Confirmação Senha"
+                    name="confirmacaoSenha"
+                    type="password"
+                    value={values.confirmacaoSenha}
+                    variant="outlined"
+                    error={errors.confirmacaoSenha ? true : false}
+                    helperText={errors.confirmacaoSenha ? "Campo obrigatório" : ""}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item md={6} xs={12}>
               <TextField
                 {...register("tipoUsuario", {
@@ -230,14 +268,16 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
                 onChange={handleChange}
                 select
                 required
+                disable={user}
                 disabled={onlyView}
                 SelectProps={{ native: true }}
-                value={values.tipoUsuario || ""}
+                value={values.tipoUsuario || "morador"}
                 variant="outlined"
               >
                 {[
                   { label: "Morador", value: "morador" },
                   { label: "Admin", value: "admin" },
+                  { label: "Super Admin", value: "superAdmin" },
                 ].map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -283,15 +323,15 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
         >
           {!onlyView ? (
             <>
-              <Button color="error" variant="contained" onClick={() => Router.replace("/usuarios")}>
+              <Button name="cancel" color="error" variant="contained" onClick={() => Router.replace("/usuarios")}>
                 Cancelar
               </Button>
-              <Button color="primary" variant="contained" type="submit">
+              <Button name="save" color="primary" variant="contained" type="submit">
                 Salvar
               </Button>
             </>
           ) : (
-            <Button color="primary" variant="contained" onClick={() => Router.replace("/usuarios")}>
+            <Button name="back" color="primary" variant="contained" onClick={() => Router.replace("/usuarios")}>
               Voltar
             </Button>
           )}

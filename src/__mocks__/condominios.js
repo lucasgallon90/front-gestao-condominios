@@ -10,7 +10,19 @@ export const condominios = [
     cep: "91000000",
     saldoCaixaInicial: 1540,
     saldoCaixaAtual: 1800,
-    codigoCondominio: "joaopaulo2",
+    codigoCondominio: "condominio1",
+    ativo:true
+  },
+  {
+    _id: uuid(),
+    nome: "Edifício João Paulo",
+    endereco: "Rua Joaquim Barbosa, 115, Centro",
+    cidade: "Porto Alegre",
+    uf: "RS",
+    cep: "91000000",
+    saldoCaixaInicial: 0,
+    saldoCaixaAtual: 0,
+    codigoCondominio: uuid(),
     ativo:true
   },
 ];

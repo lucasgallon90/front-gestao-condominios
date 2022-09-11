@@ -87,6 +87,7 @@ export const SearchToolbar = ({
           </Typography>
           <Box sx={{ m: 1 }}>
             <Button
+              id="exportar"
               startIcon={<DownloadIcon fontSize="small" />}
               sx={{ mr: 1 }}
               onClick={handleClickExportar}
@@ -94,7 +95,7 @@ export const SearchToolbar = ({
               Exportar
             </Button>
             {!props.addButtonHide && (
-              <Button color="primary" variant="contained" onClick={handleClickAdicionar}>
+              <Button id="add" color="primary" variant="contained" onClick={handleClickAdicionar}>
                 Adicionar
               </Button>
             )}

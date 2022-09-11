@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from "@mui/material";
+import toast from "react-hot-toast";
+import api from "../../services/api";
+import { useForm } from "react-hook-form";
+import Router from "next/router";
 
-export const SettingsPassword = (props) => {
+export const PerfilSenha = (props) => {
+  const {
+    handleSubmit,
+  } = useForm();
   const [values, setValues] = useState({
     password: "",
     confirm: "",
@@ -14,8 +21,29 @@ export const SettingsPassword = (props) => {
     });
   };
 
+  async function onSubmit() {
+    const { confirm, password } = values;
+    if(confirm != password){
+      return toast.error("Senhas estão diferentes, por favor verifique e tente novamente")
+    }
+    let requestConfig = {
+      url: `usuarios/update-senha`,
+      method: "put",
+      data: {novaSenha:password},
+    };
+    await api(requestConfig)
+      .then(() => {
+        toast.success(`Senha alterada com sucesso`);
+        Router.push("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Não foi possível alterar a senha, tente novamente mais tarde");
+      });
+  }
+
   return (
-    <form {...props}>
+    <form {...props} onSubmit={handleSubmit(() => onSubmit())}>
       <Card>
         <CardHeader
           subheader="Caso deseje alterar a senha, informe uma nova abaixo"
@@ -52,7 +80,7 @@ export const SettingsPassword = (props) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained">
+          <Button color="primary" variant="contained" type="submit">
             Atualizar Senha
           </Button>
         </Box>

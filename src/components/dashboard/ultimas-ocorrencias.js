@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardHeader,
+  LinearProgress,
   Table,
   TableBody,
   TableCell,
@@ -19,8 +20,10 @@ import { Chip } from "../chip";
 
 export const UltimasOcorrencias = (props) => {
   const [ocorrencias, setOcorrencias] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
+    setLoading(true);
     await api
       .post("ocorrencias/list", null, { params: { limit: 1 } })
       .then((res) => {
@@ -28,7 +31,7 @@ export const UltimasOcorrencias = (props) => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      }).finally(()=>setLoading(false))
   }, []);
 
   return (
@@ -46,6 +49,22 @@ export const UltimasOcorrencias = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
+            {ocorrencias?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
               {ocorrencias?.map((ocorrencia) => (
                 <TableRow hover key={ocorrencia._id}>
                   <TableCell>{format(new Date(ocorrencia.createdAt), "dd/MM/yyyy - HH:mm")}</TableCell>

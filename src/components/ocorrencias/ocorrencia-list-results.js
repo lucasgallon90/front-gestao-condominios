@@ -130,7 +130,7 @@ export const OcorrenciaListResults = ({
                       <Tooltip title="Editar">
                         <IconButton
                           onClick={(event) => handleClickEditar(event, ocorrencia._id)}
-                          aria-label="edit"
+                          aria-label="edit" 
                           color="success"
                         >
                           <EditIcon />

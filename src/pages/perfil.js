@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Box, Container, Grid, Typography, Divider } from "@mui/material";
 import { PerfilDetalhes } from "../components/perfil/perfil-detalhes";
 import { DashboardLayout } from "../components/dashboard-layout";
-import { SettingsPassword } from "../components/settings/settings-password";
+import { PerfilSenha } from "../components/perfil/perfil-senha";
 
 const MeuPerfil = () => (
   <>
@@ -26,7 +26,7 @@ const MeuPerfil = () => (
             <PerfilDetalhes />
           </Grid>
         </Grid>
-        <SettingsPassword />
+        <PerfilSenha />
       </Container>
     </Box>
   </>

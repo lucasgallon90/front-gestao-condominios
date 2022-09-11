@@ -208,21 +208,23 @@ export const CondominioDetails = ({ id, operation, onlyView }) => {
             p: 2,
           }}
         >
-         {!onlyView ? (
+          {!onlyView ? (
             <>
               <Button
+                name="cancel"
                 color="error"
                 variant="contained"
                 onClick={() => Router.replace("/condominios")}
               >
                 Cancelar
               </Button>
-              <Button color="primary" variant="contained" type="submit">
+              <Button name="save" color="primary" variant="contained" type="submit">
                 Salvar
               </Button>
             </>
           ) : (
             <Button
+              name="back"
               color="primary"
               variant="contained"
               onClick={() => Router.replace("/condominios")}

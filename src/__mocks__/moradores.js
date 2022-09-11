@@ -15,4 +15,17 @@ export const moradores = [
     condominio: { nome: "Frei João Paulo II" },
     codigoCondominio: "novo"
   },
+  {
+    _id: uuid(),
+    createdAt: randomDate(new Date(2022, 0, 1), new Date()),
+    email: `morador@gestaodecondominios.com.br`,
+    senha: 123,
+    nome: "Joaquim B.",
+    telefone: "(00) 92323-2500",
+    apto: "104",
+    bloco: "A",
+    tipoUsuario: "morador",
+    condominio: { nome: "Frei João Paulo II" },
+    codigoCondominio: "novo"
+  },
 ];

@@ -33,5 +33,5 @@ export function exportPDF({ title, head = [], data = [], filename="export" }) {
     doc.setFontSize(12);
     doc.text(`${j} de ${pages}`, horizontalPos, verticalPos, { align: "right" });
   }
-  doc.save(`${filename}-${format(new Date(),"dd-MM-yy-HH:mm")}.pdf`);
+  doc.save(`${filename}.pdf`);
 }

@@ -12,7 +12,7 @@ export const ocorrencias = [
   },
   {
     _id: uuid(),
-    motivo: "Problema no reigstro da água",
+    motivo: "Problema no registro da água",
     descricao: "Favor verificar o registro",
     situacao: "Aberta",
     createdAt: randomDate(new Date(2022, 0, 1), new Date()),

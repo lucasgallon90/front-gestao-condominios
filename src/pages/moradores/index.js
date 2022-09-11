@@ -71,6 +71,7 @@ const Moradores = () => {
               { label: "Bloco", key: "bloco" },
               { label: "Email", key: "email" },
             ]}
+            addButtonHide
           />
 
           <Box sx={{ mt: 3 }}>

@@ -20,8 +20,10 @@ import {
 import Router from "next/router";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
+import api from "../../services/api";
 import { formatarTelefone } from "../../utils";
 import { getInitials } from "../../utils/get-initials";
 

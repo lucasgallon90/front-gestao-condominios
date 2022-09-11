@@ -21,7 +21,7 @@ export function formatarCEP(str) {
   }
 }
 
-export function formatarTelefone(v) {
+export function formatarTelefone(v = "") {
 
   let r = v.replace(/\D/g, "");
   r = r.replace(/^0/, "");
@@ -42,4 +42,15 @@ UTILIZADO PARA O MÓDULO A NA GERAÇÃO DOS MOCKS
 */
 export function randomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+export function getRandomEmail(domain,length)
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < length; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text + domain;
 }

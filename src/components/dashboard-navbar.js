@@ -1,12 +1,11 @@
 import styled from "@emotion/styled";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import { AppBar, Avatar, Box, IconButton, Toolbar, Tooltip } from "@mui/material";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
-import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -18,7 +17,7 @@ export const DashboardNavbar = (props) => {
   const router = useRouter();
 
   function handleClickSair() {
-    Cookies.remove("token");
+    Cookies.remove("gc.token");
     router.push("/login");
   }
 

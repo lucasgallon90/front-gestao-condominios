@@ -166,16 +166,18 @@ export const MoradorDetails = ({ id, operation, onlyView }) => {
               <Button
                 color="error"
                 variant="contained"
+                name="cancel"
                 onClick={() => Router.replace("/moradores")}
               >
                 Cancelar
               </Button>
-              <Button color="primary" variant="contained" type="submit">
+              <Button name="save" color="primary" variant="contained" type="submit">
                 Salvar
               </Button>
             </>
           ) : (
             <Button
+              name="back"
               color="primary"
               variant="contained"
               onClick={() => Router.replace("/moradores")}

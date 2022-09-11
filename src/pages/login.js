@@ -50,19 +50,6 @@ const Login = () => {
     } else {
       router.push("/");
     }
-    // api
-    //   .post("auth/login/local", values)
-    //   .then((res) => {
-    //     setCookie(null, 'gc.token', res.data?.token, {
-    //       maxAge: 86400,
-    //       path: '/',
-    //     })
-    //     router.push("/")
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     setSubmitting(false);
-    //   });
   }
 
   function handleClickGoogle() {

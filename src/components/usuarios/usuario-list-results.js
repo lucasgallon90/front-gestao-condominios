@@ -135,7 +135,7 @@ export const UsuarioListResults = ({
                     <TableCell>{usuario.apto}</TableCell>
                     <TableCell>{usuario.bloco}</TableCell>
                     <TableCell>{usuario.email}</TableCell>
-                    <TableCell>{formatarTelefone(morador.telefone)}</TableCell>
+                    <TableCell>{formatarTelefone(usuario.telefone)}</TableCell>
                     <TableCell>
                       {usuario.tipoUsuario === "morador" && "Morador"}
                       {usuario.tipoUsuario === "admin" && "Administrador"}

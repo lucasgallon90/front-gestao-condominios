@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
-import { OcorrenciaDetails } from "../components/ocorrencias/ocorrencia-details";
+import { OcorrenciaDetails } from "../../components/ocorrencias/ocorrencia-details";
 import { DashboardLayout } from "../../components/dashboard-layout";
 
 const Ocorrencia = ({ operation, id }) => (

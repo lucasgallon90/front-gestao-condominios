@@ -16,7 +16,7 @@ export default function AutoComplete(props) {
     optionLabel = "label",
     required = false,
     name = "auto-complete",
-    errors = null,
+    errors,
     disabled = false,
   } = props;
   const [open, setOpen] = useState(false);
@@ -66,8 +66,8 @@ export default function AutoComplete(props) {
               </>
             ),
           }}
-          error={errors ? true : false}
-          helperText={errors ? "Campo obrigatório" : ""}
+          error={errors?.condominio ? true : false}
+          helperText={errors?.condominio ? "Campo obrigatório" : ""}
         />
       )}
     />

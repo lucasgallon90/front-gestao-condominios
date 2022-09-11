@@ -1,25 +1,47 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+require('cy-verify-downloads').addCustomCommand();
+
+Cypress.Commands.add("postTokenMorador", () => {
+  cy.request({
+    method: "POST",
+    url: `${Cypress.env('api_url')}auth/login/local`,
+    body: {
+      email: Cypress.env('email_morador'),
+      senha: Cypress.env('senha_morador'),
+    },
+  })
+    .its("body")
+    .then((identity) => {
+      cy.setCookie("gc.token", identity.token);
+    });
+});
+
+Cypress.Commands.add("postTokenSuperAdmin", () => {
+  cy.request({
+    method: "POST",
+    url: `${Cypress.env('api_url')}auth/login/local`,
+    body: {
+      email: Cypress.env('email_super_admin'),
+      senha: Cypress.env('senha_super_admin'),
+    },
+  })
+    .its("body")
+    .then((identity) => {
+      cy.setCookie("gc.token", identity.token);
+    });
+});
+
+Cypress.Commands.add("postTokenAdmin", () => {
+  cy.request({
+    method: "POST",
+    url: `${Cypress.env('api_url')}auth/login/local`,
+    body: {
+      email: Cypress.env('email_admin'),
+      senha: Cypress.env('senha_admin'),
+    },
+  })
+    .its("body")
+    .then((identity) => {
+      cy.setCookie("gc.token", identity.token);
+    });
+});
+

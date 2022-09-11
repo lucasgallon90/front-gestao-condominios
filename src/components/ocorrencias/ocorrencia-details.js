@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useUser } from "../contexts/authContext";
+import { useUser } from "../../contexts/authContext";
 import api from "../../services/api";
 import toast from "react-hot-toast";
 
@@ -12,7 +12,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
   const [values, setValues] = useState({
     _idUsuarioOcorrencia: undefined,
@@ -49,7 +49,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
             situacao: res.data.situacao,
             respostaAdmin: res.data.respostaAdmin,
           });
-          reset(values);
+        reset(values);
       })
       .catch((error) => console.log(error));
   }
@@ -150,7 +150,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
                 name="motivo"
                 onChange={handleChange}
                 required
-                value ={values.motivo || ""}
+                value={values.motivo || ""}
                 variant="outlined"
                 error={errors.motivo ? true : false}
                 helperText={errors.motivo ? "Campo obrigatório" : ""}
@@ -222,18 +222,20 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
           {!onlyView ? (
             <>
               <Button
+                name="cancel"
                 color="error"
                 variant="contained"
                 onClick={() => Router.replace("/ocorrencias")}
               >
                 Cancelar
               </Button>
-              <Button color="primary" variant="contained" type="submit">
+              <Button name="save" color="primary" variant="contained" type="submit">
                 Salvar
               </Button>
             </>
           ) : (
             <Button
+              name="back"
               color="primary"
               variant="contained"
               onClick={() => Router.replace("/ocorrencias")}
