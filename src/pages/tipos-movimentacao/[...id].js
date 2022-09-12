@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useState, useEffect } from "react";
-import { TipoMovimentacaoDetails } from "../components/tipos-movimentacao/tipo-movimentacao-details";
+import { TipoMovimentacaoDetails } from "../../components/tipos-movimentacao/tipo-movimentacao-details";
 
 const TipoMovimentacao = ({ operation, id }) => (
   <>

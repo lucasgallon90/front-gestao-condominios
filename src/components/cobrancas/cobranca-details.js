@@ -19,7 +19,7 @@ import { format } from "date-fns";
 import Router from "next/router";
 import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { cobrancas } from "../__mocks__/cobrancas";
+import { cobrancas } from "../../__mocks__/cobrancas";
 import { formatarMoeda } from "../../utils/index";
 
 export const CobrancaDetails = ({ id, operation, onlyView }) => {
