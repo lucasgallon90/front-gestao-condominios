@@ -80,7 +80,7 @@ export const PerfilSenha = (props) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained" type="submit">
+          <Button name="update-password" color="primary" variant="contained" type="submit">
             Atualizar Senha
           </Button>
         </Box>

@@ -9,6 +9,7 @@ module.exports = defineConfig({
       return require("./cypress/plugins/index.js")(on, config);
     },
   },
+  reporter: 'mochawesome',
   env: {
     front_url:"http://localhost:3000/",
     api_url:"http://localhost:8001/v1/",

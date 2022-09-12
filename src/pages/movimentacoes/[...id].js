@@ -1,8 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { DashboardLayout } from "../../components/dashboard-layout";
-import { useState, useEffect } from "react";
-import { MovimentacaoDetails } from "../components/movimentacoes/movimentacao-details";
+import { MovimentacaoDetails } from "../../components/movimentacoes/movimentacao-details";
 
 const Movimentacao = ({ operation, id }) => (
   <>

@@ -3,11 +3,9 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
+  Legend, Tooltip,
   XAxis,
-  YAxis,
+  YAxis
 } from "recharts";
 
 export const GraficoDetails = (props) => {
