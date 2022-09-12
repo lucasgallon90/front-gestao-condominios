@@ -13,6 +13,8 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
     register,
     handleSubmit,
     reset,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
   const { user } = useUser();
@@ -81,7 +83,9 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
 
   const handleChangeCondominio = (condominioSelecionado) => {
     if (condominioSelecionado) {
+      clearErrors('condominio')
       setValues({ ...values, condominio: condominioSelecionado });
+      
     } else {
       setValues({ ...values, condominio: undefined });
     }
@@ -90,8 +94,7 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
   async function onSubmit() {
     const { condominio, _id, confirmacaoSenha, ...rest } = values;
     if (!condominio) {
-      errors.condominio = true;
-      console.log(errors);
+      setError('condominio', { type: 'required', message: 'Campo obrigatório' });
       return;
     }
     let requestConfig = {};
@@ -149,7 +152,7 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
                 selectedValue={values.condominio}
                 required={true}
                 name={"condominio"}
-                errors={errors.condominio}
+                errors={errors}
                 optionLabel="nome"
                 optionKey="_id"
                 loadOptions={(nomeCondominio) => loadCondominios(nomeCondominio)}
