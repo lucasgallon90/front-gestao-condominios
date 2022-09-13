@@ -1,16 +1,39 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import api from "../../services/api";
+import NumericInput from "../common/numeric-input";
 
-export default function DialogSaldoInicialCaixa({open, setOpen}) {
+export default function DialogSaldoInicialCaixa({ open, setOpen, refreshData }) {
+  const [saldoInicial, setSaldoInicial] = useState(0);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleChangeSaldoInicial = (value) => {
+    setSaldoInicial(value || 0);
+  };
+
+  const handleClickConfirmar = async () => {
+    await api({
+      url: `caixa/saldo-inicial`,
+      method: "put",
+      data: {saldoInicial},
+    })
+      .then(() => {
+        toast.success(`Saldo inicial atualizado com sucesso!`);
+        refreshData();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Não foi possível atualizar o saldo inicial, tente novamente mais tarde");
+      })
+      .finally(() => {
+        setSaldoInicial(0);
+        handleClose();
+      });
   };
 
   const handleClose = () => {
@@ -20,23 +43,24 @@ export default function DialogSaldoInicialCaixa({open, setOpen}) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Saldo Inicial</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            O caixa inicia com o valor zerado, porém se deseja iniciar com outro valor, informe abaixo
+            O caixa inicia com o valor zerado, porém se deseja iniciar com outro valor, informe
+            abaixo
           </DialogContentText>
-          <TextField
+          <NumericInput
             autoFocus
+            label="Saldo Inicial"
             margin="dense"
-            id="saldoInicial"
-            label="Saldo inicial"
-            fullWidth
-            variant="standard"
-          />
+            name="saldoInicial"
+            value={saldoInicial}
+            handleChange={handleChangeSaldoInicial}
+          ></NumericInput>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={handleClose}>Confirmar</Button>
+          <Button onClick={handleClickConfirmar}>Confirmar</Button>
         </DialogActions>
       </Dialog>
     </div>

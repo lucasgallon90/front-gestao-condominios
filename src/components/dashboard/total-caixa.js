@@ -18,7 +18,12 @@ export const SaldoDeCaixa = (props) => {
   const [openDialogSaldoInicial, setOpenDialogSaldoInicial] = useState(false);
   const [saldoAtual, setSaldoAtual] = useState(0);
 
-  useEffect(async () => {
+  useEffect(() => {
+    loadSaldoAtual();
+  }, []);
+
+  const loadSaldoAtual = async () => {
+    setLoading(true);
     await api
       .get("caixa/saldo-atual")
       .then((res) => {
@@ -26,13 +31,14 @@ export const SaldoDeCaixa = (props) => {
       })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  }, []);
+  };
 
   return (
     <>
       <DialogSaldoInicialCaixa
         open={openDialogSaldoInicial}
         setOpen={setOpenDialogSaldoInicial}
+        refreshData={loadSaldoAtual}
       ></DialogSaldoInicialCaixa>
       <Card sx={{ height: "100%" }} {...props}>
         <CardContent>
