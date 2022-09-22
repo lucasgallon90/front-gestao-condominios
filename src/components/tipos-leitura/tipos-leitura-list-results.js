@@ -2,26 +2,38 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
-  Card, IconButton, Paper,
+  Card,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow, Tooltip
+  TableRow,
+  Tooltip,
 } from "@mui/material";
 import Router from "next/router";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
+import api from "../../services/api";
 import { formatarMoeda } from "../../utils";
 
-export const TiposLeituraListResults = ({ tiposLeitura, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+const pageUrl = "tipos-leitura";
 
+export const TiposLeituraListResults = ({
+  tiposLeitura,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  ...rest
+}) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -42,10 +54,24 @@ export const TiposLeituraListResults = ({ tiposLeitura, ...rest }) => {
   const handleClickDeletar = (event, id) => {
     event.stopPropagation();
     Swal.fire({
+      icon: "warning",
       title: "Tem certeza que deseja deletar o registro?",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Deletar",
+    }).then((value) => {
+      if (value.isConfirmed) {
+        api
+          .delete(`${pageUrl}/delete/${id}`)
+          .then(() => {
+            toast.success("Registro deletado com sucesso");
+            refreshData();
+          })
+          .catch((error) => {
+            toast.error("Não foi possível deletar o registro");
+            console.log(error);
+          });
+      }
     });
   };
 

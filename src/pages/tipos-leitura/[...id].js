@@ -19,7 +19,7 @@ const TipoLeitura = ({ operation, id }) => (
         <Typography sx={{ m: 1 }} variant="h4">
           {operation == "add" && "Novo"}
           {operation == "edit" && "Edição"}
-          {operation == "view" && "Consulta"} - Leitura
+          {operation == "view" && "Consulta"} - Tipo de Leitura
         </Typography>
         <Box sx={{ mt: 3 }}>
           <TipoLeituraDetails operation={operation} id={id} onlyView={operation == "view"} />

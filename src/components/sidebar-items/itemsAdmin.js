@@ -54,16 +54,16 @@ const itemsAdmin = [
     icon: <SettingsIcon fontSize="small" />,
     title: "Configurações",
     items: [
-      // {
-      //   icon: <FeedIcon fontSize="small" />,
-      //   title: "Tipos de Leitura",
-      //   href: "/tipos-leitura",
-      // },
-      // {
-      //   icon: <CompareArrowsIcon fontSize="small" />,
-      //   title: "Tipos de Movimentação",
-      //   href: "/tipos-movimentacao",
-      // },
+      {
+        icon: <FeedIcon fontSize="small" />,
+        title: "Tipos de Leitura",
+        href: "/tipos-leitura",
+      },
+      {
+        icon: <CompareArrowsIcon fontSize="small" />,
+        title: "Tipos de Movimentação",
+        href: "/tipos-movimentacao",
+      },
       {
         href: "/perfil",
         icon: <UsersIcon fontSize="small" />,
