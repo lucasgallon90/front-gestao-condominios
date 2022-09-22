@@ -11,7 +11,9 @@ export const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, re
         "#": /[1-9]/,
       }}
       inputRef={ref}
-      onAccept={(value) => onChange({ target: { name: props.name, value } })}
+      onAccept={(value) =>
+        onChange({ target: { name: props.name, value: value.replace(/\D/g, "") } })
+      }
       overwrite
     />
   );
