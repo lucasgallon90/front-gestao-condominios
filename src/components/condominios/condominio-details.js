@@ -52,7 +52,8 @@ export const CondominioDetails = ({ id, operation, onlyView }) => {
   const handleChange = (event) => {
     setValues({
       ...values,
-      [event.target.name]: event.target.value,
+      [event.target.name]:
+        event.target.name === "cep" ? event.target.value.replace(/\D/g, "") : event.target.value,
     });
   };
 

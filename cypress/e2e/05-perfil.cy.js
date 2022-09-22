@@ -1,6 +1,4 @@
-import { getRandomEmail } from "../../src/utils";
 import { usuarios } from "../../src/__mocks__/usuarios";
-const usuario = usuarios[0]
 const usuarioUpdate = usuarios[1];
 
 describe("Perfil", () => {
@@ -31,15 +29,22 @@ describe("Perfil", () => {
     cy.get("input[name=bloco]").clear().type(usuarioUpdate.bloco);
     cy.get("input[name=email]").clear().type(usuarioUpdate.email);
     cy.get("input[name=telefone]").clear().type(usuarioUpdate.telefone);
-    cy.get("button[name=save").click();
-    cy.url().should("equal", `${Cypress.env("front_url")}`);
+    cy.get("button[name=save")
+      .click()
+      .then(() => {
+        cy.url().should("equal", `${Cypress.env("front_url")}`);
+      });
   });
 
   it("Alterar senha", () => {
-    cy.visit("/perfil");
-    cy.get("input[name=password]").clear().type(usuarioUpdate.senha);
-    cy.get("input[name=confirm]").clear().type(usuarioUpdate.senha);
-    cy.get("button[name=update-password").click();
-    cy.url().should("equal", `${Cypress.env("front_url")}`);
+    cy.visit("/perfil").then(() => {
+      cy.get("input[name=password]").clear().type(usuarioUpdate.senha);
+      cy.get("input[name=confirm]").clear().type(usuarioUpdate.senha);
+      cy.get("button[name=update-password")
+        .click()
+        .then(() => {
+          cy.url().should('include', '/');
+        });
+    });
   });
 });

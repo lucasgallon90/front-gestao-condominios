@@ -28,7 +28,6 @@ describe("Ocorrências", () => {
   });
 
   it("Criar ocorrência", () => {
-    cy.visit("/ocorrencias");
     cy.get("#add")
       .click()
       .then(() => {
@@ -40,7 +39,6 @@ describe("Ocorrências", () => {
   });
 
   it("Atualizar ocorrência", () => {
-    cy.visit("/ocorrencias");
     cy.get(`[aria-label="edit"]`)
       .first()
       .click()
@@ -53,7 +51,6 @@ describe("Ocorrências", () => {
   });
 
   it("Excluir ocorrência", () => {
-    cy.visit("/ocorrencias");
     cy.get(`[aria-label="delete"]`)
       .first()
       .click()
@@ -63,7 +60,6 @@ describe("Ocorrências", () => {
   });
 
   it("Exportar ocorrências", () => {
-    cy.visit("/ocorrencias");
     cy.get(`#exportar`)
       .click()
       .then(() => {

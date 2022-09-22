@@ -1,5 +1,5 @@
 import { admin } from "../../src/__mocks__/usuario-admin";
-describe("Login", () => {
+describe("Login - Admin", () => {
   it("Realizar Login - admin", () => {
     cy.visit("/login");
     cy.get("input[name=email]").clear().type(admin.email);

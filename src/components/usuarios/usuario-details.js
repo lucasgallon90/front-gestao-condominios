@@ -83,9 +83,8 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
 
   const handleChangeCondominio = (condominioSelecionado) => {
     if (condominioSelecionado) {
-      clearErrors('condominio')
+      clearErrors("condominio");
       setValues({ ...values, condominio: condominioSelecionado });
-      
     } else {
       setValues({ ...values, condominio: undefined });
     }
@@ -93,22 +92,28 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
 
   async function onSubmit() {
     const { condominio, _id, confirmacaoSenha, ...rest } = values;
-    if (!condominio) {
-      setError('condominio', { type: 'required', message: 'Campo obrigatório' });
+    if (!condominio && rest.tipoUsuario != "superAdmin") {
+      setError("condominio", { type: "required", message: "Campo obrigatório" });
       return;
     }
     let requestConfig = {};
+    let data = {};
+    if (values.tipoUsuario != "superAdmin") {
+      data = { ...rest, _idCondominio: condominio._id };
+    } else {
+      data = { ...rest, _idCondominio: null };
+    }
     if (operation === "add") {
       requestConfig = {
         url: `usuarios/create`,
         method: "post",
-        data: { ...rest, _idCondominio: condominio._id },
+        data: data
       };
     } else {
       requestConfig = {
         url: `usuarios/update/${id}`,
         method: "put",
-        data: { ...rest, _idCondominio: condominio._id },
+        data: data
       };
     }
     await api(requestConfig)
@@ -144,7 +149,7 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
                 helperText={errors.nome ? "Campo obrigatório" : ""}
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            {values?.tipoUsuario != "superAdmin" && (<Grid item md={6} xs={12}>
               <AutoComplete
                 disabled={onlyView}
                 label="Condomínio"
@@ -158,7 +163,7 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
                 loadOptions={(nomeCondominio) => loadCondominios(nomeCondominio)}
                 handleChangeSelectedValue={handleChangeCondominio}
               ></AutoComplete>
-            </Grid>
+            </Grid>)}
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
@@ -215,7 +220,7 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
                 }}
               />
             </Grid>
-            {(!onlyView && operation === "add") && (
+            {!onlyView && operation === "add" && (
               <>
                 <Grid item md={6} xs={12}>
                   <TextField
@@ -326,7 +331,12 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
         >
           {!onlyView ? (
             <>
-              <Button name="cancel" color="error" variant="contained" onClick={() => Router.replace("/usuarios")}>
+              <Button
+                name="cancel"
+                color="error"
+                variant="contained"
+                onClick={() => Router.replace("/usuarios")}
+              >
                 Cancelar
               </Button>
               <Button name="save" color="primary" variant="contained" type="submit">
@@ -334,7 +344,12 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
               </Button>
             </>
           ) : (
-            <Button name="back" color="primary" variant="contained" onClick={() => Router.replace("/usuarios")}>
+            <Button
+              name="back"
+              color="primary"
+              variant="contained"
+              onClick={() => Router.replace("/usuarios")}
+            >
               Voltar
             </Button>
           )}

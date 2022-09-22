@@ -53,7 +53,6 @@ describe("Condomínios", () => {
         cy.get("input[name=cidade]").clear().type(condominioUpdate.cidade);
         cy.get("input[name=uf]").clear().type(condominioUpdate.uf);
         cy.get("input[name=cep]").clear().type(condominioUpdate.cep);
-        cy.get("input[name=codigoCondominio]").clear().type(uuid().substring(0, 5));
         cy.get("button[name=save").click();
         cy.url().should("equal", `${Cypress.env("front_url")}condominios`);
       });

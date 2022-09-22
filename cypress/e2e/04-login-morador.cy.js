@@ -1,5 +1,5 @@
 import { moradores } from "../../src/__mocks__/moradores";
-describe("Login", () => {
+describe("Login - Morador", () => {
   const morador = moradores[1];
   it("Realizar Login - morador", () => {
     cy.visit("/login");

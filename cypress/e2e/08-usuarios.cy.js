@@ -33,28 +33,32 @@ describe("Usuários", () => {
       .click()
       .then(() => {
         cy.get("input[name=nome]").clear().type(usuario.nome);
-        cy.get("input[name=email]").clear().type(getRandomEmail("@gestaodecondominios.com.br",15));
+        cy.get("input[name=email]").clear().type("novomorador2@gestaodecondominios.com.br");
         cy.get("input[name=senha]").clear().type(usuario.senha);
         cy.get("input[name=confirmacaoSenha]").clear().type(usuario.senha);
         cy.get("button[name=save").click();
-        cy.url().should('equal', `${Cypress.env('front_url')}usuarios`);
+        cy.url().should("equal", `${Cypress.env("front_url")}usuarios`);
       });
   });
 
   it("Atualizar usuário", () => {
-    cy.get(`[aria-label="edit"]`)
-      .first()
+    cy.contains("novomorador2@gestaodecondominios.com.br")
+      .parents("tr")
+      .find("button")
+      .eq(0)
       .click()
       .then(() => {
         cy.get("input[name=nome]").clear().type(usuarioUpdate.nome);
         cy.get("form").submit();
-        cy.url().should('equal', `${Cypress.env('front_url')}usuarios`);
+        cy.url().should("equal", `${Cypress.env("front_url")}usuarios`);
       });
   });
 
   it("Excluir usuário", () => {
-    cy.get(`[aria-label="delete"]`)
-      .last()
+    cy.contains("novomorador2@gestaodecondominios.com.br")
+      .parents("tr")
+      .find("button")
+      .eq(1)
       .click()
       .then(() => {
         cy.contains("Deletar").click();

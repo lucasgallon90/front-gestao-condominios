@@ -31,16 +31,18 @@ describe("Moradores", () => {
       .first()
       .click()
       .then(() => {
-        cy.get("input[name=nome]").clear().type(moradorUpdate.nome);
         cy.get("input[name=apto]").clear().type(moradorUpdate.apto);
+        cy.get("input[name=bloco]").clear().type(moradorUpdate.bloco);
         cy.get("button[name=save").click();
-        cy.url().should('equal', `${Cypress.env('front_url')}moradores`);
+        cy.url().should("equal", `${Cypress.env("front_url")}moradores`);
       });
   });
 
   it("Excluir morador", () => {
-    cy.get(`[aria-label="delete"]`)
-      .first()
+    cy.contains("novomorador1@gestaodecondominios.com.br")
+      .parents("tr")
+      .find("button")
+      .eq(1)
       .click()
       .then(() => {
         cy.contains("Deletar").click();

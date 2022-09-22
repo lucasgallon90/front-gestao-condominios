@@ -37,5 +37,5 @@ Abrir o cypress
 $ npm run test
 
 Gerar relatório de testes
-$ cypress run --reporter mochawesome
+$ npm run test-report
 ```
