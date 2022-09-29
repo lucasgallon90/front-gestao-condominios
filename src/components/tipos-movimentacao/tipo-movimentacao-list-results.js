@@ -12,19 +12,27 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
 import Router from "next/router";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
+import api from "../../services/api";
 import { Chip } from "../chip";
 
-export const TipoMovimentacaoListResults = ({ tiposMovimentacao, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+const pageUrl = "tipos-movimentacao";
 
+export const TipoMovimentacaoListResults = ({
+  tiposMovimentacao,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  ...rest
+}) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -45,10 +53,24 @@ export const TipoMovimentacaoListResults = ({ tiposMovimentacao, ...rest }) => {
   const handleClickDeletar = (event, id) => {
     event.stopPropagation();
     Swal.fire({
+      icon: "warning",
       title: "Tem certeza que deseja deletar o registro?",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Deletar",
+    }).then((value) => {
+      if (value.isConfirmed) {
+        api
+          .delete(`${pageUrl}/delete/${id}`)
+          .then(() => {
+            toast.success("Registro deletado com sucesso");
+            refreshData();
+          })
+          .catch((error) => {
+            toast.error("Não foi possível deletar o registro");
+            console.log(error);
+          });
+      }
     });
   };
 

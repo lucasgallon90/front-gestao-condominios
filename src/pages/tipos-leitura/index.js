@@ -21,7 +21,7 @@ const TiposLeitura = () => {
 
   useEffect(() => {
     list();
-  }, []);
+  }, [page, limit]);
 
   async function list(value) {
     setLoading(true);

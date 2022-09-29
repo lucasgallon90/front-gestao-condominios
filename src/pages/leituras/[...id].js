@@ -19,7 +19,7 @@ const Leitura = ({ operation, id }) => (
         <Typography sx={{ m: 1 }} variant="h4">
           {operation == "add" && "Novo"}
           {operation == "edit" && "Edição"}
-          {operation == "view" && "Consulta"}- Leitura
+          {operation == "view" && "Consulta"} - Leitura
         </Typography>
         <Box sx={{ mt: 3 }}>
           <LeituraDetails operation={operation} id={id} onlyView={operation == "view"} />

@@ -3,12 +3,11 @@ import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useUser } from "../../contexts/authContext";
 import api from "../../services/api";
 import { formatarMoeda } from "../../utils";
+import NumericInput from "../common/numeric-input";
 
 export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
-  const { user } = useUser();
   const {
     register,
     handleSubmit,
@@ -20,12 +19,10 @@ export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
     unidadeMedida: undefined,
     taxaFixa: 0,
     valorUnidade: 0,
-    _idCondominio: user?._idCondominio,
   });
 
   useEffect(() => {
     operation != "add" && getTipoLeitura();
-    reset(values);
   }, []);
 
   async function getTipoLeitura() {
@@ -39,7 +36,7 @@ export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
             taxaFixa: res.data.taxaFixa,
             valorUnidade: res.data.valorUnidade,
           });
-        reset(values);
+        reset({ ...res.data });
       })
       .catch((error) => console.log(error));
   }
@@ -111,7 +108,7 @@ export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
+              <NumericInput
                 fullWidth
                 label="Taxa Fixa"
                 name="taxaFixa"
@@ -122,7 +119,7 @@ export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
+              <NumericInput
                 fullWidth
                 label="Valor Unidade"
                 name="valorUnidade"
@@ -145,20 +142,18 @@ export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
           {!onlyView ? (
             <>
               <Button
-                name="cancel"
                 color="error"
                 variant="contained"
                 onClick={() => Router.replace("/tipos-leitura")}
               >
                 Cancelar
               </Button>
-              <Button name="save" color="primary" variant="contained" type="submit">
+              <Button color="primary" variant="contained" type="submit">
                 Salvar
               </Button>
             </>
           ) : (
             <Button
-              name="back"
               color="primary"
               variant="contained"
               onClick={() => Router.replace("/tipos-leitura")}

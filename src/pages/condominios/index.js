@@ -22,7 +22,7 @@ const Condominios = () => {
 
   useEffect(() => {
     list();
-  }, []);
+  }, [page, limit]);
 
   async function list(value) {
     let filter = null;

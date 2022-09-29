@@ -12,16 +12,24 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
 import Router from "next/router";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import Swal from "sweetalert2";
+import api from "../../services/api";
 
-export const LeituraListResults = ({ leituras, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+export const LeituraListResults = ({
+  leituras,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  loading = true,
+  ...rest
+}) => {
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -42,10 +50,24 @@ export const LeituraListResults = ({ leituras, ...rest }) => {
   const handleClickDeletar = (event, id) => {
     event.stopPropagation();
     Swal.fire({
+      icon: "warning",
       title: "Tem certeza que deseja deletar o registro?",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Deletar",
+    }).then((value) => {
+      if (value.isConfirmed) {
+        api
+          .delete(`leituras/delete/${id}`)
+          .then((res) => {
+            toast.success("Registro deletado com sucesso");
+            refreshData();
+          })
+          .catch((error) => {
+            toast.error("Não foi possível deletar o registro");
+            console.log(error);
+          });
+      }
     });
   };
 
@@ -66,7 +88,7 @@ export const LeituraListResults = ({ leituras, ...rest }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {leituras?.slice(0, limit).map((leitura) => (
+                {leituras?.map((leitura) => (
                   <TableRow
                     hover
                     key={leitura._id}

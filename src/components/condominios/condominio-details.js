@@ -27,7 +27,6 @@ export const CondominioDetails = ({ id, operation, onlyView }) => {
   useEffect(() => {
     if (user) {
       operation != "add" && getCondominio();
-      reset(values);
     }
   }, [user]);
 
@@ -44,7 +43,7 @@ export const CondominioDetails = ({ id, operation, onlyView }) => {
             uf: res.data.uf,
             cep: res.data.cep,
           });
-        reset();
+        reset({ ...res.data });
       })
       .catch((error) => console.log(error));
   }

@@ -23,7 +23,7 @@ const Ocorrencias = () => {
 
   useEffect(() => {
     list();
-  }, []);
+  }, [page, limit]);
 
   async function list(value) {
     setLoading(true);

@@ -35,11 +35,11 @@ const itemsAdmin = [
   //   icon: <AttachMoneyIcon fontSize="small" />,
   //   title: "Cobranças",
   // },
-  // {
-  //   href: "/leituras",
-  //   icon: <AssignmentIcon fontSize="small" />,
-  //   title: "Leituras",
-  // },
+  {
+    href: "/leituras",
+    icon: <AssignmentIcon fontSize="small" />,
+    title: "Leituras",
+  },
   {
     href: "/ocorrencias",
     icon: <InsightsIcon fontSize="small" />,

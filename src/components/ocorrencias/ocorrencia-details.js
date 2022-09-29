@@ -31,7 +31,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
         getMoradores();
       } else {
         setValues({ ...values, nome: user.nome, _idUsuarioOcorrencia: user._id });
-        reset(values);
+        reset(...values);
       }
     }
   }, [user]);
@@ -49,7 +49,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
             situacao: res.data.situacao,
             respostaAdmin: res.data.respostaAdmin,
           });
-        reset(values);
+        reset({ ...res.data });
       })
       .catch((error) => console.log(error));
   }

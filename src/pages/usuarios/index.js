@@ -23,7 +23,7 @@ const Usuarios = () => {
 
   useEffect(() => {
     list();
-  }, []);
+  }, [page, limit]);
 
   async function list(value) {
     setLoading(true);
@@ -37,7 +37,8 @@ const Usuarios = () => {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => setLoading(false));
+      })
+      .finally(() => setLoading(false));
   }
   return (
     <>
