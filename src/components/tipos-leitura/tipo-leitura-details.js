@@ -11,6 +11,7 @@ import Router from "next/router";
 import { useState } from "react";
 import { tiposLeitura } from "../../__mocks__/tiposLeitura";
 import { formatarMoeda } from "../../utils";
+import NumericInput from "../common/numeric-input";
 
 export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
   const [values, setValues] = useState(tiposLeitura[0]);
@@ -50,7 +51,7 @@ export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
+              <NumericInput
                 fullWidth
                 label="Taxa Fixa"
                 name="taxaFixa"
@@ -61,7 +62,7 @@ export const TipoLeituraDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
+              <NumericInput
                 fullWidth
                 label="Valor Unidade"
                 name="valorUnidade"
