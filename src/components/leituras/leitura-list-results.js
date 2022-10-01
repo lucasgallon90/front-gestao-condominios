@@ -12,13 +12,16 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
+import { format } from "date-fns";
 import Router from "next/router";
 import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import api from "../../services/api";
+import { formatarDecimal } from "../../utils";
 
 export const LeituraListResults = ({
   leituras,
@@ -30,7 +33,6 @@ export const LeituraListResults = ({
   loading = true,
   ...rest
 }) => {
-
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -59,7 +61,7 @@ export const LeituraListResults = ({
       if (value.isConfirmed) {
         api
           .delete(`leituras/delete/${id}`)
-          .then((res) => {
+          .then(() => {
             toast.success("Registro deletado com sucesso");
             refreshData();
           })
@@ -94,10 +96,10 @@ export const LeituraListResults = ({
                     key={leitura._id}
                     onClick={() => handleClickConsultar(leitura._id)}
                   >
-                    <TableCell>{leitura.mesAno}</TableCell>
+                    <TableCell>{format(new Date(leitura.mesAno), "MM/yyyy")}</TableCell>
                     <TableCell>{leitura.morador?.nome}</TableCell>
-                    <TableCell>{leitura.leituraAnterior}</TableCell>
-                    <TableCell>{leitura.leituraAtual}</TableCell>
+                    <TableCell>{formatarDecimal(leitura.leituraAnterior, 3)}</TableCell>
+                    <TableCell>{formatarDecimal(leitura.leituraAtual, 3)}</TableCell>
                     <TableCell>{leitura.tipoLeitura?.descricao}</TableCell>
                     <TableCell>
                       <Tooltip title="Editar">

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../services/api";
-import { formatarDecimal, formatarMoeda } from "../../utils";
+import { formatarMoeda } from "../../utils";
 import AutoComplete from "../common/auto-complete";
 import NumericInput from "../common/numeric-input";
 
@@ -27,7 +27,8 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
     leituraAnterior: 0,
     taxaFixa: 0,
     valor: 0,
-    valor: undefined,
+    valor: 0,
+    valorTotal: 0,
     tipoLeitura: undefined,
     mesAno: new Date(),
   });
@@ -36,19 +37,17 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
 
   useEffect(async () => {
     async function load() {
-      let usuario;
+      let leitura;
       if (operation != "add") {
-        usuario = await getLeitura();
+        leitura = await getLeitura();
       }
       if (!onlyView) {
         if (operation === "add") {
           loadTiposLeitura();
-          const res = await loadMoradores();
-          if (res?.length > 0) {
-            setValues({ ...values, morador: res[0] });
-          }
+          loadMoradores();
         } else {
-          usuario?.morador && setMoradores([usuario.morador]);
+          leitura?.morador && setMoradores([leitura.morador]);
+          leitura?.tipoLeitura && setTiposLeitura([leitura.tipoLeitura]);
         }
       }
     }
@@ -66,35 +65,58 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
       .catch((error) => console.log(error));
   }
 
+  function getLeituraAnterior(values, id) {
+    api
+      .get(`leituras/leitura-anterior/${id}`)
+      .then((res) => {
+        if (res.data) {
+          setValues({ ...values, leituraAnterior: res.data.leituraAtual });
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+
   const handleChange = (event) => {
-    if (["leituraAnterior", "leituraAtual"].includes(event.target.name)) {
-      setValues(
-        {
-          valorTotal:
-            values.taxaFixa + (values.leituraAnterior - values.leituraAtual) * values.valor,
-        },
-        ...values
-      );
+    let newValues = { ...values, [event.target.name]: event.target.value };
+    if (event.target.name === "leituraAnterior") {
+      newValues = {
+        ...newValues,
+        valor: (values.leituraAtual - event.target.value) * values.valorUnidade,
+        valorTotal:
+          values.taxaFixa + (values.leituraAtual - event.target.value) * values.valorUnidade,
+      };
     }
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
+    if (event.target.name === "leituraAtual") {
+      newValues = {
+        ...newValues,
+        valor: (event.target.value - values.leituraAnterior) * values.valorUnidade,
+        valorTotal:
+          values.taxaFixa + (event.target.value - values.leituraAnterior) * values.valorUnidade,
+      };
+    }
+    setValues({ ...newValues });
   };
 
   const handleChangeMorador = (moradorSelecionado) => {
     if (moradorSelecionado) {
       clearErrors("morador");
-      setValues({ ...values, morador: moradorSelecionado });
+      const newValues = { ...values, morador: moradorSelecionado };
+      setValues(newValues);
+      getLeituraAnterior(newValues, moradorSelecionado._id);
     } else {
-      setValues({ ...values, morador: undefined });
+      setValues({ ...values, leituraAnterior: 0, morador: undefined });
     }
   };
 
   const handleChangeTiposLeitura = (tipoLeituraSelecionada) => {
     if (tipoLeituraSelecionada) {
       clearErrors("tipoLeitura");
-      setValues({ ...values, tipoLeitura: tipoLeituraSelecionada });
+      setValues({
+        ...values,
+        taxaFixa: tipoLeituraSelecionada.taxaFixa,
+        valorUnidade: tipoLeituraSelecionada.valorUnidade,
+        tipoLeitura: tipoLeituraSelecionada,
+      });
     } else {
       setValues({ ...values, tipoLeitura: undefined });
     }
@@ -128,8 +150,45 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
       });
   }
 
+  async function onSubmit() {
+    const { morador, tipoLeitura, _idCondominio, createdAt, updatedAt, _id, ...rest } = values;
+    if (!morador) {
+      setError("condominio", { type: "required", message: "Campo obrigatório" });
+      return;
+    }
+    if (!tipoLeitura) {
+      setError("tipoLeitura", { type: "required", message: "Campo obrigatório" });
+      return;
+    }
+    let requestConfig = {};
+    let data = { ...rest, _idTipoLeitura: tipoLeitura._id, _idUsuarioLeitura: morador._id };
+
+    if (operation === "add") {
+      requestConfig = {
+        url: `leituras/create`,
+        method: "post",
+        data: data,
+      };
+    } else {
+      requestConfig = {
+        url: `leituras/update/${id}`,
+        method: "put",
+        data: data,
+      };
+    }
+    await api(requestConfig)
+      .then(() => {
+        toast.success(`Registro ${operation === "add" ? "cadastrado" : "atualizado"} com sucesso`);
+        Router.push("/leituras");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Não foi possível cadastrar o registro, tente novamente mais tarde");
+      });
+  }
+
   return (
-    <form autoComplete="off" noValidate>
+    <form autoComplete="off" noValidate onSubmit={handleSubmit(() => onSubmit())}>
       <Card>
         <CardContent>
           <Grid container spacing={3}>
@@ -203,8 +262,9 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 label="Leitura Anterior"
                 name="leituraAnterior"
                 onChange={handleChange}
+                decimalScale={3}
                 required
-                disabled={onlyView}
+                disabled={onlyView || !values.tipoLeitura}
                 value={values.leituraAnterior}
                 variant="outlined"
               />
@@ -216,8 +276,9 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 label="Leitura Atual"
                 name="leituraAtual"
                 onChange={handleChange}
+                decimalScale={3}
                 required
-                disabled={onlyView}
+                disabled={onlyView || !values.tipoLeitura}
                 value={values.leituraAtual}
                 variant="outlined"
               />
@@ -230,7 +291,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 name="taxaFixa"
                 required
                 onChange={handleChange}
-                value={formatarMoeda(values.tipoLeitura?.taxaFixa || 0)}
+                value={formatarMoeda(values.taxaFixa || 0)}
                 variant="outlined"
               />
             </Grid>
@@ -242,7 +303,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 onChange={handleChange}
                 disabled
                 required
-                value={formatarMoeda(values.tipoLeitura?.valorUnidade || 0)}
+                value={formatarMoeda(values.valorUnidade || 0)}
                 variant="outlined"
               />
             </Grid>
@@ -254,7 +315,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 onChange={handleChange}
                 disabled
                 required
-                value={formatarMoeda(values.valor || 0)}
+                value={formatarMoeda(values.valor)}
                 variant="outlined"
               />
             </Grid>
@@ -266,7 +327,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 disabled
                 required
                 onChange={handleChange}
-                value={formatarMoeda(values.valor + values.tipoLeitura?.taxaFixa || 0)}
+                value={formatarMoeda(values.valorTotal)}
                 variant="outlined"
               />
             </Grid>
@@ -280,12 +341,30 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
             p: 2,
           }}
         >
-          <Button color="error" variant="contained" onClick={() => Router.replace("/leituras")}>
-            Cancelar
-          </Button>
-          <Button color="primary" variant="contained">
-            Salvar
-          </Button>
+          {!onlyView ? (
+            <>
+              <Button
+                name="cancel"
+                color="error"
+                variant="contained"
+                onClick={() => Router.replace("/leituras")}
+              >
+                Cancelar
+              </Button>
+              <Button name="save" color="primary" variant="contained" type="submit">
+                Salvar
+              </Button>
+            </>
+          ) : (
+            <Button
+              name="back"
+              color="primary"
+              variant="contained"
+              onClick={() => Router.replace("/leituras")}
+            >
+              Voltar
+            </Button>
+          )}
         </Box>
       </Card>
     </form>

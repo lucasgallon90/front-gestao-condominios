@@ -2,12 +2,19 @@ import { TextField } from "@mui/material";
 import { NumericFormat } from "react-number-format";
 
 export default function NumericInput(props) {
-  const { value = 0, onChange = () => {}, prefix = "R$", name, ...params } = props;
+  const {
+    value = 0,
+    onChange = () => {},
+    prefix = "R$",
+    name,
+    decimalScale = 2,
+    ...params
+  } = props;
   return (
     <NumericFormat
       value={value}
       prefix={prefix}
-      decimalScale={2}
+      decimalScale={decimalScale}
       decimalSeparator={","}
       onValueChange={(values) => {
         const target = {

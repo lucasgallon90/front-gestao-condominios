@@ -7,9 +7,7 @@ export function formatarMoeda(value) {
 }
 
 export function formatarDecimal(n) {
-  return n.toFixed(2).toLocaleString("pt-BR", {
-    maximumFractionDigits: 2,
-  });
+  return ("" + n).replace(".", ",");
 }
 
 export function formatarCEP(str) {
@@ -22,7 +20,6 @@ export function formatarCEP(str) {
 }
 
 export function formatarTelefone(v = "") {
-
   let r = v.replace(/\D/g, "");
   r = r.replace(/^0/, "");
   if (r.length > 11) {
@@ -44,13 +41,12 @@ export function randomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
-export function getRandomEmail(domain,length)
-{
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+export function getRandomEmail(domain, length) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < length; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+  for (var i = 0; i < length; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return text + domain;
+  return text + domain;
 }
