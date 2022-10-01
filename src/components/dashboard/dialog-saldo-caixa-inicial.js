@@ -12,8 +12,8 @@ import NumericInput from "../common/numeric-input";
 export default function DialogSaldoInicialCaixa({ open, setOpen, refreshData }) {
   const [saldoInicial, setSaldoInicial] = useState(0);
 
-  const handleChangeSaldoInicial = (value) => {
-    setSaldoInicial(value || 0);
+  const handleChangeSaldoInicial = (event) => {
+    setSaldoInicial(event.target.value || 0);
   };
 
   const handleClickConfirmar = async () => {
