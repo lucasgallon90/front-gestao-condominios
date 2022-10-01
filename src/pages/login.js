@@ -21,12 +21,13 @@ import { useEffect, useState } from "react";
 
 const Login = () => {
   const [failedOAuth, setFailedOauth] = useState(null);
+  const [lembrarMe, setLembrarMe] = useState(true);
   const user = useUser();
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: "morador@gestaodecondominios.com.br",
-      senha: "123",
+      email: "",
+      senha: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Informe um email válido").max(255).required("Email é obrigatório"),
@@ -38,6 +39,9 @@ const Login = () => {
   });
 
   useEffect(() => {
+    if (localStorage.getItem("gc.email")) {
+      formik.setFieldValue("email", localStorage.getItem("gc.email"));
+    }
     if (router.query?.failedlogin) {
       setFailedOauth(router.query);
     }
@@ -48,12 +52,19 @@ const Login = () => {
     if (!result) {
       setSubmitting(false);
     } else {
+      if (lembrarMe) {
+        localStorage.setItem("gc.email", values.email);
+      }
       router.push("/");
     }
   }
 
   function handleClickGoogle() {
     window.open(`${process.env.NEXT_PUBLIC_API}auth/login/google`, "_self");
+  }
+
+  function handleCheckLembrarMe() {
+    setLembrarMe(!lembrarMe);
   }
 
   return (
@@ -146,7 +157,9 @@ const Login = () => {
               variant="outlined"
             />
             <FormControlLabel
-              control={<Checkbox color="primary" defaultChecked />}
+              control={
+                <Checkbox color="primary" checked={lembrarMe} onChange={handleCheckLembrarMe} />
+              }
               label="Lembrar-me"
             />
             <Box sx={{ py: 2 }}>
