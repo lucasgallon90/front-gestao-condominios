@@ -12,15 +12,15 @@ import NumericInput from "../common/numeric-input";
 export default function DialogSaldoInicialCaixa({ open, setOpen, refreshData }) {
   const [saldoInicial, setSaldoInicial] = useState(0);
 
-  const handleChangeSaldoInicial = (value) => {
-    setSaldoInicial(value || 0);
+  const handleChangeSaldoInicial = (event) => {
+    setSaldoInicial(event.target.value || 0);
   };
 
   const handleClickConfirmar = async () => {
     await api({
       url: `caixa/saldo-inicial`,
       method: "put",
-      data: {saldoInicial},
+      data: { saldoInicial },
     })
       .then(() => {
         toast.success(`Saldo inicial atualizado com sucesso!`);
@@ -55,7 +55,7 @@ export default function DialogSaldoInicialCaixa({ open, setOpen, refreshData }) 
             margin="dense"
             name="saldoInicial"
             value={saldoInicial}
-            handleChange={handleChangeSaldoInicial}
+            onChange={handleChangeSaldoInicial}
           ></NumericInput>
         </DialogContent>
         <DialogActions>

@@ -6,6 +6,7 @@ import ptLocale from "date-fns/locale/pt-BR";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import api from "../../services/api";
 import { formatarDecimal, formatarMoeda } from "../../utils";
 import AutoComplete from "../common/auto-complete";
@@ -22,8 +23,10 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
   } = useForm();
   const [values, setValues] = useState({
     morador: undefined,
-    leituraAtual: undefined,
-    leituraAnterior: undefined,
+    leituraAtual: 0,
+    leituraAnterior: 0,
+    taxaFixa: 0,
+    valor: 0,
     valor: undefined,
     tipoLeitura: undefined,
     mesAno: new Date(),
@@ -64,6 +67,15 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
   }
 
   const handleChange = (event) => {
+    if (["leituraAnterior", "leituraAtual"].includes(event.target.name)) {
+      setValues(
+        {
+          valorTotal:
+            values.taxaFixa + (values.leituraAnterior - values.leituraAtual) * values.valor,
+        },
+        ...values
+      );
+    }
     setValues({
       ...values,
       [event.target.name]: event.target.value,
@@ -198,8 +210,9 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
+              <NumericInput
                 fullWidth
+                prefix=""
                 label="Leitura Atual"
                 name="leituraAtual"
                 onChange={handleChange}
