@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { NumericFormat } from "react-number-format";
 
 export default function NumericInput(props) {
-  const { value = 0, handleChange = () => {}, name, ...params } = props;
+  const { value = 0, onChange = () => {}, name, ...params } = props;
   return (
     <NumericFormat
       value={value}

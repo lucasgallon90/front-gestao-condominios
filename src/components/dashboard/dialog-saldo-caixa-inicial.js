@@ -55,7 +55,7 @@ export default function DialogSaldoInicialCaixa({ open, setOpen, refreshData }) 
             margin="dense"
             name="saldoInicial"
             value={saldoInicial}
-            handleChange={handleChangeSaldoInicial}
+            onChange={handleChangeSaldoInicial}
           ></NumericInput>
         </DialogContent>
         <DialogActions>
