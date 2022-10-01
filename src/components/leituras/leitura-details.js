@@ -2,15 +2,14 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import DatePicker from "@mui/lab/DatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Box, Button, Card, CardContent, Divider, Grid, TextField } from "@mui/material";
-import { format } from "date-fns";
 import ptLocale from "date-fns/locale/pt-BR";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { v4 as uuid } from "uuid";
 import api from "../../services/api";
 import { formatarDecimal, formatarMoeda } from "../../utils";
 import AutoComplete from "../common/auto-complete";
+import NumericInput from "../common/numeric-input";
 
 export const LeituraDetails = ({ id, operation, onlyView }) => {
   const {
@@ -144,7 +143,13 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 label="N° Apto / Bloco"
                 name="apto"
                 onChange={handleChange}
-                value={values.apto}
+                value={`${
+                  values.morador?.apto
+                    ? `${values.morador?.apto}${
+                        values.morador?.bloco ? `/${values.morador.bloco}` : ""
+                      }`
+                    : ""
+                }`}
                 variant="outlined"
               />
             </Grid>
@@ -180,14 +185,15 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
               ></AutoComplete>
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
+              <NumericInput
                 fullWidth
+                prefix=""
                 label="Leitura Anterior"
                 name="leituraAnterior"
                 onChange={handleChange}
                 required
                 disabled={onlyView}
-                value={formatarDecimal(values.leituraAnterior || 0)}
+                value={values.leituraAnterior}
                 variant="outlined"
               />
             </Grid>
@@ -199,18 +205,18 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 onChange={handleChange}
                 required
                 disabled={onlyView}
-                value={formatarDecimal(values.leituraAtual || 0)}
+                value={values.leituraAtual}
                 variant="outlined"
               />
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                disabled={onlyView}
+                disabled
                 label="Taxa Fixa"
                 name="taxaFixa"
-                onChange={handleChange}
                 required
+                onChange={handleChange}
                 value={formatarMoeda(values.tipoLeitura?.taxaFixa || 0)}
                 variant="outlined"
               />
@@ -221,7 +227,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 label="Valor Unidade"
                 name="valor"
                 onChange={handleChange}
-                disabled={onlyView}
+                disabled
                 required
                 value={formatarMoeda(values.tipoLeitura?.valorUnidade || 0)}
                 variant="outlined"
@@ -233,7 +239,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 label="Valor Leitura"
                 name="valor"
                 onChange={handleChange}
-                disabled={onlyView}
+                disabled
                 required
                 value={formatarMoeda(values.valor || 0)}
                 variant="outlined"
@@ -245,8 +251,8 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 label="Valor Total"
                 name="valor"
                 disabled
-                onChange={handleChange}
                 required
+                onChange={handleChange}
                 value={formatarMoeda(values.valor + values.tipoLeitura?.taxaFixa || 0)}
                 variant="outlined"
               />
