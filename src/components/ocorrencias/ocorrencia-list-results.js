@@ -23,6 +23,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import api from "../../services/api";
 import Swal from "sweetalert2";
 import { Chip } from "../chip";
+import { formatarData } from "../../utils";
 
 export const OcorrenciaListResults = ({
   ocorrencias,
@@ -112,7 +113,7 @@ export const OcorrenciaListResults = ({
                     key={ocorrencia._id}
                     onClick={() => handleClickConsultar(ocorrencia._id)}
                   >
-                    <TableCell>{format(new Date(ocorrencia.createdAt), "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{formatarData(ocorrencia.createdAt)}</TableCell>
                     <TableCell>{ocorrencia.motivo}</TableCell>
                     <TableCell>{ocorrencia.usuarioOcorrencia.nome}</TableCell>
                     <TableCell>

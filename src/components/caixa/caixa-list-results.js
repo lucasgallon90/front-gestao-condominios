@@ -7,11 +7,10 @@ import {
   TableHead, TableRow,
   Typography
 } from "@mui/material";
-import { format } from "date-fns";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { formatarMoeda } from "../../utils";
+import { formatarData, formatarMoeda } from "../../utils";
 import { TablePaginationComponent } from "../common/table-pagination";
 
 export const CaixaListResults = ({ caixa, ...rest }) => {
@@ -59,7 +58,7 @@ export const CaixaListResults = ({ caixa, ...rest }) => {
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{format(operacao.createdAt, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{formatarData(operacao.createdAt)}</TableCell>
                     <TableCell>{formatarMoeda(operacao.valor)}</TableCell>
                     <TableCell>
                       <Chip label="Entrada" color="success" />

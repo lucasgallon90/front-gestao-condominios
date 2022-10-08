@@ -1,3 +1,6 @@
+import { format } from "date-fns";
+import moment from "moment-timezone";
+
 export function formatarMoeda(value) {
   if (!isNaN(value)) {
     let f = value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
@@ -21,8 +24,19 @@ export function formatarCEP(str) {
   }
 }
 
-export function formatarTelefone(v = "") {
+export function formatarData(data) {
+  return new Date(data || null).toLocaleDateString("pt-BR", { timeZone: "Factory" });
+}
 
+export function parseIsoData(date) {
+  if (!date) {
+    return null;
+  }
+  const [year, month, day] = date.substr(0, 10).split("-");
+  return moment(format(new Date(year, month - 1, day), "yyyy-MM-dd")).format("YYYY-MM-DD HH:mm Z");
+}
+
+export function formatarTelefone(v = "") {
   let r = v.replace(/\D/g, "");
   r = r.replace(/^0/, "");
   if (r.length > 11) {
@@ -44,13 +58,12 @@ export function randomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
-export function getRandomEmail(domain,length)
-{
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+export function getRandomEmail(domain, length) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < length; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+  for (var i = 0; i < length; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return text + domain;
+  return text + domain;
 }

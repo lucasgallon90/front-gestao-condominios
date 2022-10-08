@@ -6,6 +6,7 @@ import { SearchToolbar } from "../../components/common/search-toolbar";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { OcorrenciaListResults } from "../../components/ocorrencias/ocorrencia-list-results";
 import { format } from "date-fns";
+import { formatarData } from "../../utils";
 
 const filters = [
   { label: "Morador", value: "nomeMorador", type: "string" },
@@ -69,7 +70,7 @@ const Ocorrencias = () => {
               {
                 label: "Data",
                 key: "createdAt",
-                format: (value) => format(new Date(value), "dd/MM/yy"),
+                format: (value) => formatarData(value),
               },
               { label: "Motivo", key: "motivo" },
               {

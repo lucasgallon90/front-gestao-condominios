@@ -9,13 +9,13 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow,
+  TableRow
 } from "@mui/material";
-import { format } from "date-fns";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import api from "../../services/api";
+import { formatarData } from "../../utils";
 import { Chip } from "../chip";
 
 export const UltimasOcorrencias = (props) => {
@@ -67,7 +67,7 @@ export const UltimasOcorrencias = (props) => {
                 )}
               {ocorrencias?.map((ocorrencia) => (
                 <TableRow hover key={ocorrencia._id}>
-                  <TableCell>{format(new Date(ocorrencia.createdAt), "dd/MM/yyyy - HH:mm")}</TableCell>
+                  <TableCell>{formatarData(ocorrencia.createdAt)}</TableCell>
                   <TableCell>{ocorrencia.motivo}</TableCell>
                   <TableCell>{ocorrencia.usuarioOcorrencia?.nome}</TableCell>
                   <TableCell>
