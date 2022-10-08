@@ -1,12 +1,8 @@
-import { useState } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import PropTypes from "prop-types";
-import { format } from "date-fns";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
-  Avatar,
   Box,
   Card,
-  Checkbox,
   Chip,
   IconButton,
   Paper,
@@ -18,16 +14,14 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Typography,
 } from "@mui/material";
-import { getInitials } from "../../utils/get-initials";
-import { formatarMoeda } from "../../utils";
+import { format } from "date-fns";
 import Router from "next/router";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import PropTypes from "prop-types";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import api from "../../services/api";
+import { formatarMoeda } from "../../utils";
 
 export const MovimentacaoListResults = ({
   movimentacoes,
@@ -99,17 +93,25 @@ export const MovimentacaoListResults = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {movimentacoes?.slice(0, limit).map((movimentacao) => (
+                {movimentacoes.map((movimentacao) => (
                   <TableRow
                     hover
                     key={movimentacao._id}
                     onClick={() => handleClickConsultar(movimentacao._id)}
                   >
-                    <TableCell>{format(movimentacao.createdAt, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{format(new Date(movimentacao?.createdAt), "dd/MM/yyyy")}</TableCell>
                     <TableCell>{movimentacao.descricao}</TableCell>
                     <TableCell>{formatarMoeda(movimentacao.valor)}</TableCell>
-                    <TableCell>{format(movimentacao.dataVencimento, "dd/MM/yyyy")}</TableCell>
-                    <TableCell>{format(movimentacao.dataPagamento, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>
+                      {movimentacao?.dataVencimento
+                        ? format(new Date(movimentacao?.dataVencimento), "dd/MM/yyyy")
+                        : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {movimentacao?.dataPagamento
+                        ? format(new Date(movimentacao?.dataPagamento), "dd/MM/yyyy")
+                        : "-"}
+                    </TableCell>
                     <TableCell>{movimentacao.ratear ? "Sim" : "Não"}</TableCell>
                     <TableCell>{movimentacao.tipoMovimentacao?.descricao}</TableCell>
                     <TableCell>

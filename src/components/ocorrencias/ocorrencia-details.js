@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useUser } from "../../contexts/authContext";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+import AutoComplete from "../common/auto-complete";
 
 export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
   const { user } = useUser();
@@ -12,11 +13,11 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
     register,
     handleSubmit,
     reset,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
   const [values, setValues] = useState({
-    _idUsuarioOcorrencia: undefined,
-    nome: undefined,
     motivo: undefined,
     descricao: undefined,
     situacao: "Aberta",
@@ -25,61 +26,77 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
   const [moradores, setMoradores] = useState([]);
 
   useEffect(() => {
-    if (user) {
-      operation != "add" && getOcorrencia();
-      if (user?.tipoUsuario === "admin") {
-        getMoradores();
-      } else {
-        setValues({ ...values, nome: user.nome, _idUsuarioOcorrencia: user._id });
-        reset(...values);
+    async function load() {
+      let ocorrencia;
+      if (user) {
+        if (operation != "add") {
+          ocorrencia = await getOcorrencia();
+          if (user?.tipoUsuario === "admin") {
+            ocorrencia?.usuarioOcorrencia && setMoradores([ocorrencia.usuarioOcorrencia]);
+          }
+        } else {
+          if (user?.tipoUsuario === "admin") {
+            if (!onlyView) {
+              const res = await loadMoradores();
+              setValues({ ...values, usuarioOcorrencia: res[0] });
+            }
+          }
+        }
       }
     }
+    load();
   }, [user]);
 
   async function getOcorrencia() {
-    await api
+    return await api
       .get(`ocorrencias/${id}`)
       .then((res) => {
         res.data &&
           setValues({
-            _idUsuarioOcorrencia: res.data._idUsuarioOcorrencia,
-            nome: res.data.usuarioOcorrencia.nome,
+            usuarioOcorrencia: res.data.usuarioOcorrencia,
             motivo: res.data.motivo,
             descricao: res.data.descricao,
             situacao: res.data.situacao,
             respostaAdmin: res.data.respostaAdmin,
           });
-        reset({ ...res.data });
+        reset(values);
+        return res.data;
       })
       .catch((error) => console.log(error));
   }
 
-  async function getMoradores() {
-    await api
-      .post(`usuarios/list/moradores`)
+  async function loadMoradores(nome) {
+    let filter = null;
+    if (nome) filter = { nome: nome };
+    return api
+      .post(`usuarios/list/moradores`, filter)
       .then((res) => {
-        res.data && setMoradores(res.data);
-        if (res.data.length === 1) {
-          setValues({ ...values, _idUsuarioOcorrencia: res.data[0]._id, nome: res.data[0].nome });
-        }
+        setMoradores(res.data);
+        return res.data;
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   async function onSubmit() {
-    const { nome, ...rest } = values;
+    const { usuarioOcorrencia, ...rest } = values;
+    if (!usuarioOcorrencia) {
+      setError("usuarioOcorrencia", { type: "required", message: "Campo obrigatório" });
+      return;
+    }
     let requestConfig = {};
     if (operation === "add") {
       requestConfig = {
         url: `ocorrencias/create`,
         method: "post",
-        data: rest,
+        data: { ...rest, _idUsuarioOcorrencia: usuarioOcorrencia._id },
       };
     } else {
       requestConfig = {
         url: `ocorrencias/update/${id}`,
         method: "put",
-        data: rest,
+        data: { ...rest, _idUsuarioOcorrencia: usuarioOcorrencia._id },
       };
     }
     await api(requestConfig)
@@ -92,6 +109,15 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
         toast.error("Não foi possível cadastrar o registro, tente novamente mais tarde");
       });
   }
+
+  const handleChangeMorador = (moradorSelecionado) => {
+    if (moradorSelecionado) {
+      clearErrors("usuarioOcorrencia");
+      setValues({ ...values, usuarioOcorrencia: moradorSelecionado });
+    } else {
+      setValues({ ...values, usuarioOcorrencia: undefined });
+    }
+  };
 
   const handleChange = (event) => {
     setValues({
@@ -108,35 +134,24 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
             <Grid item md={6} xs={12}>
               {user?.tipoUsuario != "admin" ? (
                 <TextField
-                  fullWidth
-                  label="Morador"
-                  name="_idUsuarioOcorrencia"
-                  disabled={true}
-                  required
                   value={values.nome}
                   variant="outlined"
                   InputLabelProps={{ shrink: true }}
                 ></TextField>
               ) : (
-                <TextField
-                  fullWidth
-                  label="Morador"
-                  name="_idUsuarioOcorrencia"
-                  onChange={handleChange}
-                  select
+                <AutoComplete
                   disabled={onlyView}
-                  required
-                  SelectProps={{ native: true }}
-                  value={values.nome}
-                  variant="outlined"
-                  InputLabelProps={{ shrink: true }}
-                >
-                  {moradores?.map((option) => (
-                    <option key={option._id} value={option.nome}>
-                      {option.nome}
-                    </option>
-                  ))}
-                </TextField>
+                  label="Morador"
+                  data={moradores}
+                  selectedValue={values.usuarioOcorrencia}
+                  required={true}
+                  name="usuarioOcorrencia"
+                  errors={errors}
+                  optionLabel="nome"
+                  optionKey="_id"
+                  loadOptions={(nome) => loadMoradores(nome)}
+                  handleChangeSelectedValue={handleChangeMorador}
+                ></AutoComplete>
               )}
             </Grid>
             <Grid item md={6} xs={12}>

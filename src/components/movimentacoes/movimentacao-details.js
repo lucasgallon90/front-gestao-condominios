@@ -2,6 +2,7 @@ import { Box, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import api from "../../services/api";
 import AutoComplete from "../common/auto-complete";
 import NumericInput from "../common/numeric-input";
@@ -85,8 +86,39 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
     });
   };
 
+  async function onSubmit() {
+    const { tipoMovimentacao, createdAt, updatedAt, _idCondominio, ...rest } = values;
+    if (!tipoMovimentacao) {
+      setError("tipoMovimentacao", { type: "required", message: "Campo obrigatório" });
+      return;
+    }
+    let requestConfig = {};
+    if (operation === "add") {
+      requestConfig = {
+        url: `movimentacoes/create`,
+        method: "post",
+        data: { ...rest, _idTipoMovimentacao: tipoMovimentacao._id },
+      };
+    } else {
+      requestConfig = {
+        url: `movimentacoes/update/${id}`,
+        method: "put",
+        data: { ...rest, _idTipoMovimentacao: tipoMovimentacao._id },
+      };
+    }
+    await api(requestConfig)
+      .then(() => {
+        toast.success(`Registro ${operation === "add" ? "cadastrado" : "atualizado"} com sucesso`);
+        Router.push("/movimentacoes");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Não foi possível cadastrar o registro, tente novamente mais tarde");
+      });
+  }
+
   return (
-    <form autoComplete="off" noValidate>
+    <form autoComplete="off" noValidate onSubmit={handleSubmit(() => onSubmit())}>
       <Card>
         <CardContent>
           <Grid container spacing={3}>
@@ -181,19 +213,30 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained">
-            Imprimir
-          </Button>
-          <Button
-            color="error"
-            variant="contained"
-            onClick={() => Router.replace("/movimentacoes")}
-          >
-            Cancelar
-          </Button>
-          <Button color="primary" variant="contained">
-            Salvar
-          </Button>
+          {!onlyView ? (
+            <>
+              <Button
+                name="cancel"
+                color="error"
+                variant="contained"
+                onClick={() => Router.replace("/movimentacoes")}
+              >
+                Cancelar
+              </Button>
+              <Button name="save" color="primary" variant="contained" type="submit">
+                Salvar
+              </Button>
+            </>
+          ) : (
+            <Button
+              name="back"
+              color="primary"
+              variant="contained"
+              onClick={() => Router.replace("/movimentacoes")}
+            >
+              Voltar
+            </Button>
+          )}
         </Box>
       </Card>
     </form>
