@@ -150,9 +150,6 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained">
-            Imprimir
-          </Button>
           <Button
             color="error"
             variant="contained"
