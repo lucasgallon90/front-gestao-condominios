@@ -25,16 +25,16 @@ const itemsAdmin = [
     icon: <UsersIcon fontSize="small" />,
     title: "Moradores",
   },
-  // {
-  //   href: "/movimentacoes",
-  //   icon: <AttachMoneyIcon fontSize="small" />,
-  //   title: "Movimentações",
-  // },
-  // {
-  //   href: "/cobrancas",
-  //   icon: <AttachMoneyIcon fontSize="small" />,
-  //   title: "Cobranças",
-  // },
+  {
+    href: "/movimentacoes",
+    icon: <AttachMoneyIcon fontSize="small" />,
+    title: "Movimentações",
+  },
+  {
+    href: "/cobrancas",
+    icon: <AttachMoneyIcon fontSize="small" />,
+    title: "Cobranças",
+  },
   {
     href: "/leituras",
     icon: <AssignmentIcon fontSize="small" />,

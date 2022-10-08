@@ -1,8 +1,9 @@
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import DatePicker from "@mui/lab/DatePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Box, Button, Card, CardContent, Divider, Grid, TextField } from "@mui/material";
-import ptLocale from "date-fns/locale/pt-BR";
+import { format } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,7 +15,6 @@ import NumericInput from "../common/numeric-input";
 
 export const LeituraDetails = ({ id, operation, onlyView }) => {
   const {
-    register,
     handleSubmit,
     reset,
     setError,
@@ -225,7 +225,6 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <LocalizationProvider dateAdapter={AdapterDateFns} locale={ptLocale}>
                 <DatePicker
                   views={["year", "month"]}
                   label="Mês/Ano"
@@ -234,11 +233,10 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                   disabled={onlyView}
                   value={values.mesAno}
                   onChange={(newValue) => {
-                    setValues({ ...values, mesAno: newValue });
+                    setValues({ ...values, mesAno: format(new Date(newValue), "yyyy-MM") });
                   }}
                   renderInput={(params) => <TextField {...params} fullWidth helperText={null} />}
                 />
-              </LocalizationProvider>
             </Grid>
             <Grid item md={6} xs={12}>
               <AutoComplete

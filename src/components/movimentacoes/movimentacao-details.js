@@ -1,47 +1,81 @@
-import { useState, useEffect } from "react";
+import { Box, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import Router from "next/router";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { movimentacoes } from "../../__mocks__/movimentacoes";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { formatarMoeda } from "../../utils/index";
-import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import api from "../../services/api";
+import AutoComplete from "../common/auto-complete";
+import NumericInput from "../common/numeric-input";
 
 export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
   const [values, setValues] = useState({
-    nome: "Katarina",
-    lastName: "Smith",
-    email: "demo@devias.io",
-    phone: "",
-    state: "Alabama",
-    country: "USA",
+    descricao: "",
+    valor: 0,
+    tipoMovimentacao: undefined,
+    ratear: false,
+    dataVencimento: undefined,
+    dataPagamento: undefined,
   });
+  const [tiposMovimentacao, setTiposMovimentacao] = useState([]);
 
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-  };
+  useEffect(async () => {
+    async function load() {
+      let movimentacao;
+      if (operation != "add") {
+        movimentacao = await getMovimentacao();
+      }
+      if (!onlyView) {
+        if (operation === "add") {
+          loadTiposMovimentacao();
+        } else {
+          movimentacao?.tipoMovimentacao && setTiposMovimentacao([movimentacao.tipoMovimentacao]);
+        }
+      }
+    }
+    load();
+  }, []);
 
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
+  async function getMovimentacao() {
+    return await api
+      .get(`movimentacoes/${id}`)
+      .then((res) => {
+        res.data && setValues(res.data);
+        reset(res.data);
+        return res.data;
+      })
+      .catch((error) => console.log(error));
+  }
+
+  async function loadTiposMovimentacao(descricao) {
+    let filter = null;
+    if (descricao) filter = { descricao };
+    return api
+      .post("tipos-movimentacao/list", filter)
+      .then((res) => {
+        console.log(res.data);
+        setTiposMovimentacao(res.data);
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const handleChangeTipoMovimentacao = (tipoMovimentacaoSelecionado) => {
+    if (tipoMovimentacaoSelecionado) {
+      clearErrors("tipoMovimentacao");
+      const newValues = { ...values, tipoMovimentacao: tipoMovimentacaoSelecionado };
+      setValues(newValues);
+    } else {
+      setValues({ ...values, tipoMovimentacao: undefined });
+    }
   };
 
   const handleChange = (event) => {
@@ -69,34 +103,31 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
+              <NumericInput
                 fullWidth
-                disabled={onlyView}
                 label="Valor"
                 name="valor"
                 onChange={handleChange}
                 required
+                disabled={onlyView}
                 value={values.valor}
                 variant="outlined"
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Tipo Movimentação"
-                name="state"
-                onChange={handleChange}
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {[].map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+              <AutoComplete
+                disabled={onlyView}
+                label="Tipos de Movimentação"
+                data={tiposMovimentacao}
+                selectedValue={values.tipoMovimentacao}
+                required={true}
+                name={"tipoMovimentacao"}
+                errors={errors}
+                optionLabel="descricao"
+                optionKey="_id"
+                loadOptions={(descricao) => loadTiposMovimentacao(descricao)}
+                handleChangeSelectedValue={handleChangeTipoMovimentacao}
+              ></AutoComplete>
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField

@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { format, isValid } from "date-fns";
 import Router from "next/router";
 import { Download as DownloadIcon } from "../../icons/download";
 import { Search as SearchIcon } from "../../icons/search";
@@ -58,6 +59,13 @@ export const SearchToolbar = ({
   function handleChangeDate(value) {
     setFilterValue(value);
     list(value);
+  }
+
+  function handleChangeMesAno(value) {
+    setFilterValue(value);
+    if (isValid(new Date(value)) && value) {
+      list(format(new Date(value), "yyyy-MM"));
+    }
   }
 
   function handleSubmit(event) {
@@ -114,31 +122,47 @@ export const SearchToolbar = ({
                       renderInput={(params) => <TextField {...params} />}
                     />
                   )}
-                  {props?.filters?.find((filter) => filter.value === selectedFilter)?.type !=
-                    "date" && (
-                    <TextField
-                      autoComplete="off"
+                  {props?.filters?.find((filter) => filter.value === selectedFilter)?.type ===
+                    "mesAno" && (
+                    <DatePicker
+                      views={["year", "month"]}
+                      label="Mês/Ano"
+                      minDate={new Date("2012-03-01")}
+                      maxDate={new Date("2023-06-01")}
                       value={filterValue}
-                      onChange={handleChangeSearchInput}
-                      fullWidth
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <SvgIcon
-                              sx={{ cursor: filterValue?.length > 0 && "pointer" }}
-                              color="action"
-                              fontSize="small"
-                              onClick={(e) => filterValue?.length > 0 && handleSubmit(e)}
-                            >
-                              <SearchIcon />
-                            </SvgIcon>
-                          </InputAdornment>
-                        ),
-                      }}
-                      placeholder={"Pesquisar"}
-                      variant="outlined"
+                      onChange={handleChangeMesAno}
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth helperText={null} />
+                      )}
                     />
                   )}
+                  {props?.filters?.find((filter) => filter.value === selectedFilter)?.type !=
+                    "date" &&
+                    props?.filters?.find((filter) => filter.value === selectedFilter)?.type !=
+                      "mesAno" && (
+                      <TextField
+                        autoComplete="off"
+                        value={filterValue}
+                        onChange={handleChangeSearchInput}
+                        fullWidth
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <SvgIcon
+                                sx={{ cursor: filterValue?.length > 0 && "pointer" }}
+                                color="action"
+                                fontSize="small"
+                                onClick={(e) => filterValue?.length > 0 && handleSubmit(e)}
+                              >
+                                <SearchIcon />
+                              </SvgIcon>
+                            </InputAdornment>
+                          ),
+                        }}
+                        placeholder={"Pesquisar"}
+                        variant="outlined"
+                      />
+                    )}
                   <FilterRadio
                     filters={props?.filters}
                     selected={selectedFilter}

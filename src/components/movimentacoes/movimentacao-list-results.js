@@ -26,11 +26,19 @@ import Router from "next/router";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Swal from "sweetalert2";
+import api from "../../services/api";
 
-export const MovimentacaoListResults = ({ movimentacoes, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
+export const MovimentacaoListResults = ({
+  movimentacoes,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  loading = true,
+  ...rest
+}) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -50,10 +58,24 @@ export const MovimentacaoListResults = ({ movimentacoes, ...rest }) => {
   const handleClickDeletar = (event, id) => {
     event.stopPropagation();
     Swal.fire({
+      icon: "warning",
       title: "Tem certeza que deseja deletar o registro?",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Deletar",
+    }).then((value) => {
+      if (value.isConfirmed) {
+        api
+          .delete(`movimentacoes/delete/${id}`)
+          .then((res) => {
+            toast.success("Registro deletado com sucesso");
+            refreshData();
+          })
+          .catch((error) => {
+            toast.error("Não foi possível deletar o registro");
+            console.log(error);
+          });
+      }
     });
   };
 
