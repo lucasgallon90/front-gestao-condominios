@@ -1,9 +1,11 @@
 import { Box, Button, Card, CardContent, Grid, TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../services/api";
+import { formatarData, parseIsoData } from "../../utils";
 import AutoComplete from "../common/auto-complete";
 import NumericInput from "../common/numeric-input";
 
@@ -47,7 +49,16 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
     return await api
       .get(`movimentacoes/${id}`)
       .then((res) => {
-        res.data && setValues(res.data);
+        res.data &&
+          setValues({
+            ...res.data,
+            dataVencimento: res.data?.dataVencimento
+              ? new Date(parseIsoData(res.data?.dataVencimento))
+              : null,
+            dataPagamento: res.data?.dataPagamento
+              ? new Date(parseIsoData(res.data?.dataPagamento))
+              : null,
+          });
         reset(res.data);
         return res.data;
       })
@@ -87,7 +98,7 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
   };
 
   async function onSubmit() {
-    const { tipoMovimentacao, createdAt, updatedAt, _idCondominio, ...rest } = values;
+    const { tipoMovimentacao, createdAt, updatedAt, _idCondominio, _id, ...rest } = values;
     if (!tipoMovimentacao) {
       setError("tipoMovimentacao", { type: "required", message: "Campo obrigatório" });
       return;
@@ -164,8 +175,9 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
+                disabled={onlyView}
                 label="Ratear"
-                name="state"
+                name="ratear"
                 onChange={handleChange}
                 select
                 SelectProps={{ native: true }}
@@ -181,27 +193,25 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
               </TextField>
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
+              <DatePicker
                 label="Data Vencimento"
                 name="dataVencimento"
-                InputLabelProps={{ shrink: true }}
-                type="date"
-                onChange={handleChange}
-                value={null}
                 variant="outlined"
+                disabled={onlyView}
+                value={values.dataVencimento || null}
+                onChange={(value) => handleChange({ target: { name: "dataVencimento", value } })}
+                renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
+              <DatePicker
                 label="Data Pagamento"
-                InputLabelProps={{ shrink: true }}
                 name="dataPagamento"
-                type="date"
-                onChange={handleChange}
-                value={values.dataPagamento}
                 variant="outlined"
+                disabled={onlyView}
+                value={values.dataPagamento || null}
+                onChange={(value) => handleChange({ target: { name: "dataPagamento", value } })}
+                renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </Grid>
           </Grid>

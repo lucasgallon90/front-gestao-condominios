@@ -15,13 +15,14 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import { format } from "date-fns";
+import { format, parse, parseISO } from "date-fns";
 import Router from "next/router";
 import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import api from "../../services/api";
-import { formatarMoeda } from "../../utils";
+import { formatarData, formatarMoeda } from "../../utils";
 
 export const MovimentacaoListResults = ({
   movimentacoes,
@@ -61,7 +62,7 @@ export const MovimentacaoListResults = ({
       if (value.isConfirmed) {
         api
           .delete(`movimentacoes/delete/${id}`)
-          .then((res) => {
+          .then(() => {
             toast.success("Registro deletado com sucesso");
             refreshData();
           })
@@ -99,17 +100,17 @@ export const MovimentacaoListResults = ({
                     key={movimentacao._id}
                     onClick={() => handleClickConsultar(movimentacao._id)}
                   >
-                    <TableCell>{format(new Date(movimentacao?.createdAt), "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{formatarData(movimentacao?.createdAt)}</TableCell>
                     <TableCell>{movimentacao.descricao}</TableCell>
                     <TableCell>{formatarMoeda(movimentacao.valor)}</TableCell>
                     <TableCell>
                       {movimentacao?.dataVencimento
-                        ? format(new Date(movimentacao?.dataVencimento), "dd/MM/yyyy")
+                        ? formatarData(movimentacao?.dataVencimento)
                         : "-"}
                     </TableCell>
                     <TableCell>
                       {movimentacao?.dataPagamento
-                        ? format(new Date(movimentacao?.dataPagamento), "dd/MM/yyyy")
+                        ? formatarData(movimentacao?.dataPagamento)
                         : "-"}
                     </TableCell>
                     <TableCell>{movimentacao.ratear ? "Sim" : "Não"}</TableCell>

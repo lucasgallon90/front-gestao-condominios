@@ -1,3 +1,6 @@
+import { format } from "date-fns";
+import moment from "moment-timezone";
+
 export function formatarMoeda(value) {
   if (!isNaN(value)) {
     let f = value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
@@ -17,6 +20,18 @@ export function formatarCEP(str) {
   } else {
     return str;
   }
+}
+
+export function formatarData(data) {
+  return new Date(data || null).toLocaleDateString("pt-BR", { timeZone: "Factory" });
+}
+
+export function parseIsoData(date) {
+  if (!date) {
+    return null;
+  }
+  const [year, month, day] = date.substr(0, 10).split("-");
+  return moment(format(new Date(year, month - 1, day), "yyyy-MM-dd")).format("YYYY-MM-DD HH:mm Z");
 }
 
 export function formatarTelefone(v = "") {
