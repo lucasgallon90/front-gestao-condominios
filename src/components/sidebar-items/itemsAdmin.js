@@ -15,11 +15,11 @@ const itemsAdmin = [
     icon: <ChartBarIcon fontSize="small" />,
     title: "Dashboard",
   },
-  // {
-  //   href: "/caixa",
-  //   icon: <AccountBalanceWalletIcon fontSize="small" />,
-  //   title: "Caixa",
-  // },
+  {
+    href: "/caixa",
+    icon: <AccountBalanceWalletIcon fontSize="small" />,
+    title: "Caixa",
+  },
   {
     href: "/moradores",
     icon: <UsersIcon fontSize="small" />,

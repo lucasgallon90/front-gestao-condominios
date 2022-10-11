@@ -1,7 +1,9 @@
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
-  Card, IconButton,
+  Card,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -10,19 +12,25 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
-import { format } from "date-fns";
 import Router from "next/router";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { formatarMoeda } from "../../utils";
+import Swal from "sweetalert2";
+import api from "../../services/api";
+import { formatarData, formatarMoeda } from "../../utils";
 
-export const CobrancaListResults = ({ cobrancas, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
+export const CobrancaListResults = ({
+  cobrancas,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  loading = true,
+  ...rest
+}) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -33,6 +41,35 @@ export const CobrancaListResults = ({ cobrancas, ...rest }) => {
 
   const handleClickConsultar = (id) => {
     Router.push(`/cobrancas/view/${id}`);
+  };
+
+  const handleClickEditar = (event, id) => {
+    event.stopPropagation();
+    Router.push(`/cobrancas/edit/${id}`);
+  };
+
+  const handleClickDeletar = (event, id) => {
+    event.stopPropagation();
+    Swal.fire({
+      icon: "warning",
+      title: "Tem certeza que deseja deletar o registro?",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Deletar",
+    }).then((value) => {
+      if (value.isConfirmed) {
+        api
+          .delete(`cobrancas/delete/${id}`)
+          .then(() => {
+            toast.success("Registro deletado com sucesso");
+            refreshData();
+          })
+          .catch((error) => {
+            toast.error("Não foi possível deletar o registro");
+            console.log(error);
+          });
+      }
+    });
   };
 
   return (
@@ -52,24 +89,34 @@ export const CobrancaListResults = ({ cobrancas, ...rest }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cobrancas?.slice(0, limit).map((cobranca) => (
+                {cobrancas?.map((cobranca) => (
                   <TableRow
                     hover
                     key={cobranca._id}
+                    onClick={() => handleClickConsultar(cobranca._id)}
                   >
-                    <TableCell>{format(cobranca.createdAt, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{formatarData(cobranca.createdAt)}</TableCell>
                     <TableCell>{cobranca.descricao}</TableCell>
                     <TableCell>{formatarMoeda(cobranca.valor)}</TableCell>
-                    <TableCell>{format(cobranca.dataVencimento, "dd/MM/yyyy")}</TableCell>
-                    <TableCell>{format(cobranca.dataPagamento, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{formatarData(cobranca.dataVencimento)}</TableCell>
+                    <TableCell>{formatarData(cobranca.dataPagamento)}</TableCell>
                     <TableCell>
-                      <Tooltip title="Visualizar">
+                      <Tooltip title="Editar">
                         <IconButton
-                          onClick={()=>handleClickConsultar(cobranca._id)}
+                          onClick={(event) => handleClickEditar(event, movimentacao._id)}
                           aria-label="edit"
                           color="success"
                         >
-                          <VisibilityIcon />
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Deletar">
+                        <IconButton
+                          onClick={(event) => handleClickDeletar(event, movimentacao._id)}
+                          aria-label="delete"
+                          color="error"
+                        >
+                          <DeleteIcon />
                         </IconButton>
                       </Tooltip>
                     </TableCell>

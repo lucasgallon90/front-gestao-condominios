@@ -20,12 +20,25 @@ import Router from "next/router";
 import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { cobrancas } from "../../__mocks__/cobrancas";
-import { formatarMoeda } from "../../utils/index";
+import { formatarData, formatarMoeda } from "../../utils/index";
+import { useUser } from "../../contexts/authContext";
+import { useForm } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers";
 
 export const CobrancaDetails = ({ id, operation, onlyView }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-  const [values, setValues] = useState(cobrancas[0]);
+  const { user } = useUser();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [values, setValues] = useState({
+    descricao: "",
+    valorTotal: 0,
+    dataVencimento: undefined,
+    dataPagamento: undefined,
+  });
 
   const handleChange = (event) => {
     setValues({
@@ -42,7 +55,8 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                disabled
+                required
+                disabled={onlyView}
                 label="Descrição"
                 name="descricao"
                 value={values.descricao}
@@ -52,7 +66,8 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                disabled
+                required
+                disabled={onlyView}
                 label="Valor Total"
                 name="valor"
                 value={formatarMoeda(values.valor || 0)}
@@ -60,40 +75,27 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
+              <DatePicker
                 label="Data Vencimento"
                 name="dataVencimento"
-                InputLabelProps={{ shrink: true }}
-                type="date"
-                disabled
-                value={format(values.dataVencimento, "yyyy-MM-dd")}
                 variant="outlined"
+                disabled={onlyView}
+                value={values.dataVencimento || null}
+                onChange={(value) => handleChange({ target: { name: "dataVencimento", value } })}
+                renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
+              <DatePicker
                 label="Data Pagamento"
-                InputLabelProps={{ shrink: true }}
                 name="dataPagamento"
-                type="date"
-                disabled
-                value={format(values.dataPagamento, "yyyy-MM-dd")}
                 variant="outlined"
+                disabled={onlyView}
+                value={values.dataPagamento || null}
+                onChange={(value) => handleChange({ target: { name: "dataPagamento", value } })}
+                renderInput={(params) => <TextField {...params} fullWidth />}
               />
             </Grid>
-            {/* <Grid item md={12} xs={12}>
-              <TextField
-                fullWidth
-                label="Mês/Ano"
-                name="mesAno"
-                disabled
-                value={values.mesAno}
-                variant="outlined"
-              >
-              </TextField>
-            </Grid> */}
             <Grid item xs={12}>
               <Divider />
               <Typography
@@ -109,6 +111,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                 fullWidth
                 label="Selecionar Morador"
                 name="state"
+                disabled={onlyView}
                 onChange={handleChange}
                 select
                 SelectProps={{ native: true }}
@@ -127,6 +130,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                 fullWidth
                 label="Mês/Ano"
                 name="state"
+                disabled={onlyView}
                 onChange={handleChange}
                 select
                 SelectProps={{ native: true }}
@@ -148,9 +152,11 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
               p: 2,
             }}
           >
-            <Button color="primary" variant="contained">
-              Carregar
-            </Button>
+            {!onlyView && (
+              <Button color="primary" variant="contained">
+                Carregar
+              </Button>
+            )}
           </Box>
         </CardContent>
         <Divider />
@@ -160,6 +166,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>Descrição</TableCell>
                     <TableCell>Valor Total</TableCell>
                     <TableCell>Medida Leitura</TableCell>
                     <TableCell>Valor Rateado/Leitura</TableCell>
@@ -169,6 +176,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                 <TableBody>
                   {values.itemsCobranca?.map((item) => (
                     <TableRow hover key={item._id}>
+                      <TableCell>{item.descricao}</TableCell>
                       <TableCell>{formatarMoeda(item.valorTotal)}</TableCell>
                       <TableCell>8.4 m3</TableCell>
                       <TableCell>{formatarMoeda(item.valorRateado)}</TableCell>
@@ -190,9 +198,30 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
           <Button color="primary" variant="contained">
             Imprimir
           </Button>
-          <Button color="error" variant="contained" onClick={() => Router.replace("/cobrancas")}>
-            Voltar
-          </Button>
+          {!onlyView ? (
+            <>
+              <Button
+                name="cancel"
+                color="error"
+                variant="contained"
+                onClick={() => Router.replace("/cobrancas")}
+              >
+                Cancelar
+              </Button>
+              <Button name="save" color="primary" variant="contained" type="submit">
+                Salvar
+              </Button>
+            </>
+          ) : (
+            <Button
+              name="back"
+              color="primary"
+              variant="contained"
+              onClick={() => Router.replace("/cobrancas")}
+            >
+              Voltar
+            </Button>
+          )}
         </Box>
       </Card>
     </form>

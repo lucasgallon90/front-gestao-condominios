@@ -19,12 +19,14 @@ const Condominios = () => {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     list();
   }, [page, limit]);
 
   async function list(value) {
+    setLoading(true);
     let filter = null;
     if (selectedFilter && (value || filterValue))
       filter = { [selectedFilter]: value || filterValue };
@@ -35,7 +37,8 @@ const Condominios = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(() => setLoading(false));
   }
 
   return (
@@ -79,6 +82,7 @@ const Condominios = () => {
               limit={limit}
               setLimit={setLimit}
               refreshData={list}
+              loading={loading}
             />
           </Box>
         </Container>

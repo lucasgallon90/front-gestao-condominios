@@ -1,24 +1,30 @@
 import {
-  Box, Card, Chip, Paper,
+  Box,
+  Card,
+  Chip,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead, TableRow,
+  TableHead,
+  TableRow,
   Typography
 } from "@mui/material";
-import { format } from "date-fns";
 import PropTypes from "prop-types";
-import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { formatarMoeda } from "../../utils";
+import { formatarData, formatarMoeda } from "../../utils";
 import { TablePaginationComponent } from "../common/table-pagination";
 
-export const CaixaListResults = ({ caixa, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
-
-
+export const CaixaListResults = ({
+  caixa,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  loading = true,
+  ...rest
+}) => {
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -43,10 +49,7 @@ export const CaixaListResults = ({ caixa, ...rest }) => {
               </TableHead>
               <TableBody>
                 {caixa.slice(0, limit).map((operacao) => (
-                  <TableRow
-                    hover
-                    key={operacao._id}
-                  >
+                  <TableRow hover key={operacao._id}>
                     <TableCell>
                       <Box
                         sx={{
@@ -59,7 +62,7 @@ export const CaixaListResults = ({ caixa, ...rest }) => {
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{format(operacao.createdAt, "dd/MM/yyyy")}</TableCell>
+                    <TableCell>{formatarData(operacao.createdAt)}</TableCell>
                     <TableCell>{formatarMoeda(operacao.valor)}</TableCell>
                     <TableCell>
                       <Chip label="Entrada" color="success" />
@@ -71,7 +74,15 @@ export const CaixaListResults = ({ caixa, ...rest }) => {
           </TableContainer>
         </Box>
       </PerfectScrollbar>
-      <TablePaginationComponent registers={caixa} page={page} limit={limit} />
+      <TablePaginationComponent
+        component="div"
+        count={caixa?.length}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleLimitChange}
+        page={page}
+        rowsPerPage={limit}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
     </Card>
   );
 };
