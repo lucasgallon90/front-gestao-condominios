@@ -54,6 +54,11 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
           <Grid container spacing={3}>
             <Grid item md={6} xs={12}>
               <TextField
+                {...register("descricao", {
+                  required: true,
+                })}
+                error={errors.descricao ? true : false}
+                helperText={errors.descricao ? "Campo obrigatório" : ""}
                 fullWidth
                 required
                 disabled={onlyView}
@@ -65,6 +70,11 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
+                {...register("total", {
+                  required: true,
+                })}
+                error={errors.total ? true : false}
+                helperText={errors.total ? "Campo obrigatório" : ""}
                 fullWidth
                 required
                 disabled={onlyView}

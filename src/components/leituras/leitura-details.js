@@ -228,8 +228,8 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 <DatePicker
                   views={["year", "month"]}
                   label="Mês/Ano"
-                  minDate={new Date("2012-03-01")}
-                  maxDate={new Date("2023-06-01")}
+                  minDate={new Date("2000-03-01")}
+                  maxDate={new Date("2050-06-01")}
                   disabled={onlyView}
                   value={values.mesAno}
                   onChange={(newValue) => {

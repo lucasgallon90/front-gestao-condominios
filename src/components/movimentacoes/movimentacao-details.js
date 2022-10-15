@@ -71,7 +71,6 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
     return api
       .post("tipos-movimentacao/list", filter)
       .then((res) => {
-        console.log(res.data);
         setTiposMovimentacao(res.data);
         return res.data;
       })
@@ -83,7 +82,12 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
   const handleChangeTipoMovimentacao = (tipoMovimentacaoSelecionado) => {
     if (tipoMovimentacaoSelecionado) {
       clearErrors("tipoMovimentacao");
-      const newValues = { ...values, tipoMovimentacao: tipoMovimentacaoSelecionado };
+      const newValues = {
+        ...values,
+        tipoMovimentacao: tipoMovimentacaoSelecionado,
+        ratear: tipoMovimentacaoSelecionado.gerarCobranca ? true : false,
+      };
+
       setValues(newValues);
     } else {
       setValues({ ...values, tipoMovimentacao: undefined });
