@@ -15,13 +15,14 @@ import {
   Tooltip,
 } from "@mui/material";
 import { format } from "date-fns";
+import moment from "moment";
 import Router from "next/router";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import api from "../../services/api";
-import { formatarDecimal } from "../../utils";
+import { formatarData, formatarDecimal } from "../../utils";
 
 export const LeituraListResults = ({
   leituras,
@@ -96,7 +97,7 @@ export const LeituraListResults = ({
                     key={leitura._id}
                     onClick={() => handleClickConsultar(leitura._id)}
                   >
-                    <TableCell>{format(new Date(leitura.mesAno), "MM/yyyy")}</TableCell>
+                    <TableCell>{moment(leitura.mesAno + "-01").format("MM/YYYY")}</TableCell>
                     <TableCell>{leitura.morador?.nome}</TableCell>
                     <TableCell>{formatarDecimal(leitura.leituraAnterior, 3)}</TableCell>
                     <TableCell>{formatarDecimal(leitura.leituraAtual, 3)}</TableCell>

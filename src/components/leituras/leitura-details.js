@@ -12,6 +12,7 @@ import api from "../../services/api";
 import { formatarMoeda } from "../../utils";
 import AutoComplete from "../common/auto-complete";
 import NumericInput from "../common/numeric-input";
+import moment from "moment";
 
 export const LeituraDetails = ({ id, operation, onlyView }) => {
   const {
@@ -228,10 +229,10 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 <DatePicker
                   views={["year", "month"]}
                   label="Mês/Ano"
-                  minDate={new Date("2000-03-01")}
-                  maxDate={new Date("2050-06-01")}
+                  minDate={moment().subtract(3, 'years').toDate()}
+                  maxDate={moment().add(3, 'years').toDate()}
                   disabled={onlyView}
-                  value={values.mesAno}
+                  value={moment(values.mesAno+"-01").toDate()}
                   onChange={(newValue) => {
                     setValues({ ...values, mesAno: format(new Date(newValue), "yyyy-MM") });
                   }}
