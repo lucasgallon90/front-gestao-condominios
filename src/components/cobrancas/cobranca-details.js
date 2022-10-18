@@ -7,24 +7,24 @@ import {
   Grid,
   Paper,
   Table,
-  TableBody,
-  Typography,
-  TableCell,
+  TableBody, TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
+  TextField, Typography
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
 import { format } from "date-fns";
+import moment from "moment";
 import Router from "next/router";
 import { useEffect, useState } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { cobrancas } from "../../__mocks__/cobrancas";
-import { formatarData, formatarMoeda } from "../../utils/index";
-import { useUser } from "../../contexts/authContext";
 import { useForm } from "react-hook-form";
-import { DatePicker } from "@mui/x-date-pickers";
+import toast from "react-hot-toast";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { useUser } from "../../contexts/authContext";
 import api from "../../services/api";
+import { formatarMoeda } from "../../utils/index";
+import AutoComplete from "../common/auto-complete";
 
 export const CobrancaDetails = ({ id, operation, onlyView }) => {
   const { user } = useUser();
@@ -32,6 +32,8 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
     register,
     handleSubmit,
     reset,
+    clearErrors,
+    setError,
     formState: { errors },
   } = useForm();
   const [values, setValues] = useState({
@@ -39,11 +41,17 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
     valorTotal: 0,
     dataVencimento: undefined,
     dataPagamento: undefined,
+    mesAno: new Date(),
   });
+  const [moradores, setMoradores] = useState([]);
 
   useEffect(() => {
     if (user) {
-      operation != "add" && getCobranca();
+      if (operation != "add") {
+        getCobranca();
+      } else {
+        loadMoradores();
+      }
     }
   }, [user]);
 
@@ -57,6 +65,20 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
       .catch((error) => console.log(error));
   }
 
+  async function loadMoradores(nome) {
+    let filter = { ativo: true };
+    if (nome) filter = { nome: nome, ...filter };
+    return api
+      .post(`usuarios/list/moradores`, filter)
+      .then((res) => {
+        setMoradores(res.data);
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -64,8 +86,48 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
     });
   };
 
+  const handleChangeMorador = (moradorSelecionado) => {
+    if (moradorSelecionado) {
+      clearErrors("morador");
+      setValues({ ...values, morador: moradorSelecionado });
+    } else {
+      setValues({ ...values, morador: undefined });
+    }
+  };
+
+  async function onSubmit() {
+    const { morador, createdAt, updatedAt, _id, ...rest } = values;
+    if (!morador) {
+      setError("morador", { type: "required", message: "Campo obrigatório" });
+      return;
+    }
+    let requestConfig = {};
+    if (operation === "add") {
+      requestConfig = {
+        url: `cobrancas/create`,
+        method: "post",
+        data: { ...rest, _idUsuarioOcorrencia: usuarioOcorrencia._id },
+      };
+    } else {
+      requestConfig = {
+        url: `cobrancas/update/${id}`,
+        method: "put",
+        data: { ...rest, _idUsuarioOcorrencia: usuarioOcorrencia._id },
+      };
+    }
+    await api(requestConfig)
+      .then(() => {
+        toast.success(`Registro ${operation === "add" ? "cadastrado" : "atualizado"} com sucesso`);
+        Router.push("/cobrancas");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Não foi possível cadastrar o registro, tente novamente mais tarde");
+      });
+  }
+
   return (
-    <form autoComplete="off" noValidate>
+    <form autoComplete="off" noValidate onSubmit={handleSubmit(() => onSubmit())}>
       <Card>
         <CardContent>
           <Grid container spacing={3}>
@@ -79,6 +141,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                 fullWidth
                 required
                 disabled={onlyView}
+                onChange={handleChange}
                 label="Descrição"
                 name="descricao"
                 value={values.descricao}
@@ -95,6 +158,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                 fullWidth
                 required
                 disabled={onlyView}
+                onChange={handleChange}
                 label="Valor Total"
                 name="valor"
                 value={formatarMoeda(values.valor || 0)}
@@ -134,42 +198,36 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
               </Typography>
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Selecionar Morador"
-                name="state"
+              <AutoComplete
                 disabled={onlyView}
-                onChange={handleChange}
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {[].map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+                label="Morador"
+                data={moradores}
+                selectedValue={values.morador}
+                required={true}
+                name={"morador"}
+                errors={errors}
+                optionLabel="nome"
+                optionKey="_id"
+                loadOptions={(nomeMorador) => loadMoradores(nomeMorador)}
+                handleChangeSelectedValue={handleChangeMorador}
+              ></AutoComplete>
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Mês/Ano"
-                name="state"
+              <DatePicker
+                views={["year", "month"]}
+                label="Mês/Ano*"
+                minDate={moment().subtract(3, "years").toDate()}
+                maxDate={moment().add(3, "years").toDate()}
                 disabled={onlyView}
-                onChange={handleChange}
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {[].map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+                value={values.mesAno ? moment(values.mesAno + "-01").toDate() : undefined}
+                onChange={(newValue) => {
+                  setValues({
+                    ...values,
+                    mesAno: newValue ? format(new Date(newValue), "yyyy-MM") : undefined,
+                  });
+                }}
+                renderInput={(params) => <TextField {...params} fullWidth helperText={null} />}
+              />
             </Grid>
           </Grid>
           <Box
@@ -222,9 +280,11 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained">
-            Imprimir
-          </Button>
+          {operation != "add" && (
+            <Button color="primary" variant="contained">
+              Imprimir
+            </Button>
+          )}
           {!onlyView ? (
             <>
               <Button

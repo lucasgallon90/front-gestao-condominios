@@ -28,7 +28,7 @@ const Moradores = () => {
 
   async function list(value) {
     setLoading(true);
-    let filter = null;
+    let filter = { ativo: true };
     if (selectedFilter && (value || filterValue))
       filter = { [selectedFilter]: value || filterValue };
     await api
@@ -38,7 +38,8 @@ const Moradores = () => {
       })
       .catch((error) => {
         console.log(error);
-      }).finally(() => setLoading(false));
+      })
+      .finally(() => setLoading(false));
   }
 
   return (

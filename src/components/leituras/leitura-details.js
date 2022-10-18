@@ -124,8 +124,8 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
   };
 
   async function loadMoradores(nomeMorador) {
-    let filter = null;
-    if (nomeMorador) filter = { nome: nomeMorador };
+    let filter = {ativo: true};
+    if (nomeMorador) filter = { nome: nomeMorador, ...filter };
     return api
       .post("usuarios/list/moradores", filter)
       .then((res) => {

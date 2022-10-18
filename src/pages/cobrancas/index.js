@@ -90,6 +90,7 @@ const Cobrancas = () => {
               limit={limit}
               setLimit={setLimit}
               refreshData={list}
+              loading={loading}
             />
           </Box>
         </Container>

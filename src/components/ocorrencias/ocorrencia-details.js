@@ -66,8 +66,8 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
   }
 
   async function loadMoradores(nome) {
-    let filter = null;
-    if (nome) filter = { nome: nome };
+    let filter = {ativo: true};
+    if (nome) filter = { nome: nome, ...filter };
     return api
       .post(`usuarios/list/moradores`, filter)
       .then((res) => {

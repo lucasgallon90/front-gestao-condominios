@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { format, isValid } from "date-fns";
+import moment from "moment";
 import Router from "next/router";
 import { Download as DownloadIcon } from "../../icons/download";
 import { Search as SearchIcon } from "../../icons/search";
@@ -127,8 +128,8 @@ export const SearchToolbar = ({
                     <DatePicker
                       views={["year", "month"]}
                       label="Mês/Ano"
-                      minDate={new Date("2012-03-01")}
-                      maxDate={new Date("2023-06-01")}
+                      minDate={moment().subtract(3, "years").toDate()}
+                      maxDate={moment().add(3, "years").toDate()}
                       value={filterValue}
                       onChange={handleChangeMesAno}
                       renderInput={(params) => (
