@@ -2,14 +2,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
-  Card, IconButton, Paper,
+  Card,
+  IconButton,
+  LinearProgress,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow, Tooltip
+  TableRow,
+  Tooltip,
 } from "@mui/material";
 import Router from "next/router";
 import PropTypes from "prop-types";
@@ -18,9 +22,16 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import { formatarMoeda } from "../../utils";
 
-export const TiposLeituraListResults = ({ tiposLeitura, ...rest }) => {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(0);
+export const TiposLeituraListResults = ({
+  tiposLeitura,
+  refreshData,
+  page,
+  setPage,
+  limit,
+  setLimit,
+  loading = true,
+  ...rest
+}) => {
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -65,7 +76,23 @@ export const TiposLeituraListResults = ({ tiposLeitura, ...rest }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tiposLeitura?.slice(0, limit).map((tipoLeitura) => (
+                {tiposLeitura?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
+                {tiposLeitura?.map((tipoLeitura) => (
                   <TableRow
                     hover
                     key={tipoLeitura._id}
