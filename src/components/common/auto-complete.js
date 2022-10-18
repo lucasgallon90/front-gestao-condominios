@@ -66,8 +66,8 @@ export default function AutoComplete(props) {
               </>
             ),
           }}
-          error={errors["condominio"] ? true : false}
-          helperText={errors["condominio"] ? "Campo obrigatório" : ""}
+          error={errors[name] ? true : false}
+          helperText={errors[name] ? "Campo obrigatório" : ""}
         />
       )}
     />
