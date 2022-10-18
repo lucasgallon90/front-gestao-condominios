@@ -17,13 +17,14 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import Router from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { cobrancas } from "../../__mocks__/cobrancas";
 import { formatarData, formatarMoeda } from "../../utils/index";
 import { useUser } from "../../contexts/authContext";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
+import api from "../../services/api";
 
 export const CobrancaDetails = ({ id, operation, onlyView }) => {
   const { user } = useUser();
@@ -39,6 +40,22 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
     dataVencimento: undefined,
     dataPagamento: undefined,
   });
+
+  useEffect(() => {
+    if (user) {
+      operation != "add" && getCobranca();
+    }
+  }, [user]);
+
+  async function getCobranca() {
+    await api
+      .get(`cobrancas/${id}`)
+      .then((res) => {
+        res.data && setValues({ ...res.data });
+        reset({ ...res.data });
+      })
+      .catch((error) => console.log(error));
+  }
 
   const handleChange = (event) => {
     setValues({

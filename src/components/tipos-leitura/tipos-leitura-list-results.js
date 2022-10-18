@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   IconButton,
+  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -32,6 +33,7 @@ export const TiposLeituraListResults = ({
   setPage,
   limit,
   setLimit,
+  loading = true,
   ...rest
 }) => {
   const handleLimitChange = (event) => {
@@ -91,7 +93,23 @@ export const TiposLeituraListResults = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tiposLeitura?.slice(0, limit).map((tipoLeitura) => (
+              {tiposLeitura?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
+                {tiposLeitura?.map((tipoLeitura) => (
                   <TableRow
                     hover
                     key={tipoLeitura._id}

@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   IconButton,
+  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -31,6 +32,7 @@ export const TipoMovimentacaoListResults = ({
   setPage,
   limit,
   setLimit,
+  loading,  
   ...rest
 }) => {
   const handleLimitChange = (event) => {
@@ -88,7 +90,23 @@ export const TipoMovimentacaoListResults = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tiposMovimentacao?.slice(0, limit).map((tipoMovimentacao) => (
+              {tiposMovimentacao?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
+                {tiposMovimentacao?.map((tipoMovimentacao) => (
                   <TableRow
                     hover
                     key={tipoMovimentacao._id}

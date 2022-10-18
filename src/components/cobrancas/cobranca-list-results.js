@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   IconButton,
+  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -89,6 +90,22 @@ export const CobrancaListResults = ({
                 </TableRow>
               </TableHead>
               <TableBody>
+                {cobrancas?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
                 {cobrancas?.map((cobranca) => (
                   <TableRow
                     hover
