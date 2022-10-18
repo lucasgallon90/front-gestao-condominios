@@ -32,7 +32,7 @@ const Cobrancas = () => {
     if (selectedFilter && (value || filterValue))
       filter = { [selectedFilter]: value || filterValue };
     await api
-      .post("cobrancas", filter, { params: { limit, page } })
+      .post("cobrancas/list", filter, { params: { limit, page } })
       .then((res) => {
         setCobrancas(res.data);
       })

@@ -53,7 +53,7 @@ export const UsuarioDetails = ({ id, operation, onlyView }) => {
     return await api
       .get(`usuarios/${id}`)
       .then((res) => {
-        res.data && setValues(res.data);
+        setValues(res.data);
         reset(res.data);
         return res.data;
       })

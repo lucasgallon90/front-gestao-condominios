@@ -7,11 +7,13 @@ import {
   Grid,
   Paper,
   Table,
-  TableBody, TableCell,
+  TableBody,
+  TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField, Typography
+  TextField,
+  Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { format } from "date-fns";
@@ -38,29 +40,35 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
   } = useForm();
   const [values, setValues] = useState({
     descricao: "",
-    valorTotal: 0,
+    valor: 0,
     dataVencimento: undefined,
     dataPagamento: undefined,
-    mesAno: new Date(),
+    mesAno: format(new Date(), "yyyy-MM"),
   });
   const [moradores, setMoradores] = useState([]);
 
   useEffect(() => {
-    if (user) {
-      if (operation != "add") {
-        getCobranca();
-      } else {
-        loadMoradores();
+    async function load() {
+      let cobranca;
+      if (user) {
+        if (operation != "add") {
+          cobranca = await getCobranca();
+          cobranca?.morador && setMoradores([cobranca.morador]);
+        } else {
+          loadMoradores();
+        }
       }
     }
+    load();
   }, [user]);
 
   async function getCobranca() {
-    await api
+    return await api
       .get(`cobrancas/${id}`)
       .then((res) => {
-        res.data && setValues({ ...res.data });
+        setValues({ ...res.data });
         reset({ ...res.data });
+        return res.data;
       })
       .catch((error) => console.log(error));
   }
@@ -106,13 +114,13 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
       requestConfig = {
         url: `cobrancas/create`,
         method: "post",
-        data: { ...rest, _idUsuarioOcorrencia: usuarioOcorrencia._id },
+        data: { ...rest, _idUsuarioCobranca: morador._id },
       };
     } else {
       requestConfig = {
         url: `cobrancas/update/${id}`,
         method: "put",
-        data: { ...rest, _idUsuarioOcorrencia: usuarioOcorrencia._id },
+        data: { ...rest, _idUsuarioCobranca: morador._id },
       };
     }
     await api(requestConfig)

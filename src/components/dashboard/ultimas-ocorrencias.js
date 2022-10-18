@@ -27,7 +27,7 @@ export const UltimasOcorrencias = (props) => {
     await api
       .post("ocorrencias/list", null, { params: { limit: 1 } })
       .then((res) => {
-        res.data && setOcorrencias(res.data);
+        setOcorrencias(res.data);
       })
       .catch((error) => {
         console.log(error);

@@ -41,15 +41,11 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
       let leitura;
       if (operation != "add") {
         leitura = await getLeitura();
-      }
-      if (!onlyView) {
-        if (operation === "add") {
-          loadTiposLeitura();
-          loadMoradores();
-        } else {
-          leitura?.morador && setMoradores([leitura.morador]);
-          leitura?.tipoLeitura && setTiposLeitura([leitura.tipoLeitura]);
-        }
+        leitura?.morador && setMoradores([leitura.morador]);
+        leitura?.tipoLeitura && setTiposLeitura([leitura.tipoLeitura]);
+      } else {
+        loadTiposLeitura();
+        loadMoradores();
       }
     }
     load();
@@ -59,7 +55,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
     return await api
       .get(`leituras/${id}`)
       .then((res) => {
-        res.data && setValues(res.data);
+        setValues(res.data);
         reset(res.data);
         return res.data;
       })
@@ -124,7 +120,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
   };
 
   async function loadMoradores(nomeMorador) {
-    let filter = {ativo: true};
+    let filter = { ativo: true };
     if (nomeMorador) filter = { nome: nomeMorador, ...filter };
     return api
       .post("usuarios/list/moradores", filter)
@@ -226,18 +222,18 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-                <DatePicker
-                  views={["year", "month"]}
-                  label="Mês/Ano"
-                  minDate={moment().subtract(3, 'years').toDate()}
-                  maxDate={moment().add(3, 'years').toDate()}
-                  disabled={onlyView}
-                  value={moment(values.mesAno+"-01").toDate()}
-                  onChange={(newValue) => {
-                    setValues({ ...values, mesAno: format(new Date(newValue), "yyyy-MM") });
-                  }}
-                  renderInput={(params) => <TextField {...params} fullWidth helperText={null} />}
-                />
+              <DatePicker
+                views={["year", "month"]}
+                label="Mês/Ano"
+                minDate={moment().subtract(3, "years").toDate()}
+                maxDate={moment().add(3, "years").toDate()}
+                disabled={onlyView}
+                value={moment(values.mesAno + "-01").toDate()}
+                onChange={(newValue) => {
+                  setValues({ ...values, mesAno: format(new Date(newValue), "yyyy-MM") });
+                }}
+                renderInput={(params) => <TextField {...params} fullWidth helperText={null} />}
+              />
             </Grid>
             <Grid item md={6} xs={12}>
               <AutoComplete

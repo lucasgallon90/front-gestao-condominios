@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import Router from "next/router";
 import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import api from "../../services/api";
@@ -115,12 +116,12 @@ export const CobrancaListResults = ({
                     <TableCell>{formatarData(cobranca.createdAt)}</TableCell>
                     <TableCell>{cobranca.descricao}</TableCell>
                     <TableCell>{formatarMoeda(cobranca.valor)}</TableCell>
-                    <TableCell>{formatarData(cobranca.dataVencimento)}</TableCell>
-                    <TableCell>{formatarData(cobranca.dataPagamento)}</TableCell>
+                    <TableCell>{cobranca.dataVencimento ? formatarData(cobranca.dataVencimento) : "-"}</TableCell>
+                    <TableCell>{cobranca.dataPagamento ? formatarData(cobranca.dataPagamento) : "-"}</TableCell>
                     <TableCell>
                       <Tooltip title="Editar">
                         <IconButton
-                          onClick={(event) => handleClickEditar(event, movimentacao._id)}
+                          onClick={(event) => handleClickEditar(event, cobranca._id)}
                           aria-label="edit"
                           color="success"
                         >
@@ -129,7 +130,7 @@ export const CobrancaListResults = ({
                       </Tooltip>
                       <Tooltip title="Deletar">
                         <IconButton
-                          onClick={(event) => handleClickDeletar(event, movimentacao._id)}
+                          onClick={(event) => handleClickDeletar(event, cobranca._id)}
                           aria-label="delete"
                           color="error"
                         >
