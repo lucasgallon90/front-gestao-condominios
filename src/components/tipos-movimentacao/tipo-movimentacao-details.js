@@ -38,10 +38,15 @@ export const TipoMovimentacaoDetails = ({ id, operation, onlyView }) => {
   }
 
   const handleChange = (event) => {
-    setValues({
+    let newValues = { ...values };
+    newValues = {
       ...values,
       [event.target.name]: event.target.value,
-    });
+    };
+    if (event.target.name === "tipo" && event.target.value === "E" && values.gerarCobranca) {
+      newValues = { ...newValues, gerarCobranca: false };
+    }
+    setValues({ ...newValues });
   };
 
   async function onSubmit() {
@@ -117,7 +122,7 @@ export const TipoMovimentacaoDetails = ({ id, operation, onlyView }) => {
               <TextField
                 fullWidth
                 label="Gerar Cobrança"
-                disabled={onlyView}
+                disabled={onlyView || values.tipo === "E"}
                 name="gerarCobranca"
                 onChange={handleChange}
                 required

@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   Divider,
   Grid,
   Paper,
@@ -23,6 +24,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import Swal from "sweetalert2";
 import { useUser } from "../../contexts/authContext";
 import api from "../../services/api";
 import { formatarMoeda } from "../../utils/index";
@@ -44,6 +46,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
     dataVencimento: undefined,
     dataPagamento: undefined,
     mesAno: format(new Date(), "yyyy-MM"),
+    morador: undefined,
   });
   const [moradores, setMoradores] = useState([]);
 
@@ -87,6 +90,37 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
       });
   }
 
+  async function loadContasLeituras() {
+    Swal.fire({
+      title: "Carregando...",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    await api
+      .post(`cobrancas/contas-leituras-rateio`, {
+        _idUsuario: values.morador._id,
+        mesAno: values.mesAno,
+      })
+      .then((res) => {
+        const itemsCobranca = [...res.data.leituras, ...res.data.contas];
+        const valorTotal = itemsCobranca.reduce((accumulator, item) => {
+          return accumulator + item.valor;
+        }, 0);
+        setValues({ ...values, itemsCobranca, valor: valorTotal });
+        toast.success("Contas/leituras carregadas com sucesso!");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Não foi possível carregar as contas/leituras, tente novamente mais tarde!");
+      })
+      .finally(() => Swal.close());
+  }
+
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -104,7 +138,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
   };
 
   async function onSubmit() {
-    const { morador, createdAt, updatedAt, _id, ...rest } = values;
+    const { morador, createdAt, updatedAt, _idCondominio, _id, ...rest } = values;
     if (!morador) {
       setError("morador", { type: "required", message: "Campo obrigatório" });
       return;
@@ -117,10 +151,14 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
         data: { ...rest, _idUsuarioCobranca: morador._id },
       };
     } else {
+      const updateData = rest.itemsCobranca?.map((item) => {
+        const { createdAt, updatedAt, _idCondominio, _idCobranca, _id, ...rest } = item;
+        return rest;
+      });
       requestConfig = {
         url: `cobrancas/update/${id}`,
         method: "put",
-        data: { ...rest, _idUsuarioCobranca: morador._id },
+        data: { ...rest, itemsCobranca: updateData, _idUsuarioCobranca: morador._id },
       };
     }
     await api(requestConfig)
@@ -199,7 +237,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
               <Divider />
               <Typography
                 sx={{ justifyContent: "center", display: "flex", textAlign: "center" }}
-                variant="subtitle1"
+                variant="subtitle"
               >
                 Selecione o morador e o mês/ano para carregar as contas a ratear e leituras
                 correspondentes
@@ -246,7 +284,12 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
             }}
           >
             {!onlyView && (
-              <Button color="primary" variant="contained">
+              <Button
+                color="primary"
+                variant="contained"
+                disabled={!values.morador}
+                onClick={loadContasLeituras}
+              >
                 Carregar
               </Button>
             )}
@@ -256,24 +299,33 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
         <PerfectScrollbar>
           <Box>
             <TableContainer component={Paper}>
+              <Typography sx={{ margin: 1 }} variant="h6" id="tableTitle" component="div">
+                Contas
+              </Typography>
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>Conta / Leitura</TableCell>
                     <TableCell>Descrição</TableCell>
-                    <TableCell>Valor Total</TableCell>
                     <TableCell>Medida Leitura</TableCell>
-                    <TableCell>Valor Rateado/Leitura</TableCell>
-                    <TableCell>Data Vencimento</TableCell>
+                    <TableCell>Valor Conta Rateada / Valor Leitura</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {values.itemsCobranca?.map((item) => (
                     <TableRow hover key={item._id}>
+                      <TableCell>
+                        {item._idLeitura ? (
+                          <Chip color="info" label="Leitura"></Chip>
+                        ) : (
+                          <Chip color="error" label="Conta"></Chip>
+                        )}
+                      </TableCell>
                       <TableCell>{item.descricao}</TableCell>
-                      <TableCell>{formatarMoeda(item.valorTotal)}</TableCell>
-                      <TableCell>8.4 m3</TableCell>
-                      <TableCell>{formatarMoeda(item.valorRateado)}</TableCell>
-                      <TableCell>{format(item.dataVencimento, "dd/MM/yy")}</TableCell>
+                      <TableCell>
+                        {item._idLeitura ? item.leitura + " " + item.unidadeMedida : "-"}
+                      </TableCell>
+                      <TableCell>{formatarMoeda(item.valor)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

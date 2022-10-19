@@ -85,7 +85,10 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
       const newValues = {
         ...values,
         tipoMovimentacao: tipoMovimentacaoSelecionado,
-        ratear: tipoMovimentacaoSelecionado.gerarCobranca ? true : false,
+        ratear:
+          tipoMovimentacaoSelecionado?.tipo === "S" && tipoMovimentacaoSelecionado.gerarCobranca
+            ? true
+            : false,
       };
 
       setValues(newValues);
@@ -179,13 +182,13 @@ export const MovimentacaoDetails = ({ id, operation, onlyView }) => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                disabled={onlyView}
+                disabled={onlyView || values.tipoMovimentacao?.tipo === "E"}
                 label="Ratear"
                 name="ratear"
                 onChange={handleChange}
                 select
                 SelectProps={{ native: true }}
-                value={values.state}
+                value={values.ratear}
                 variant="outlined"
               >
                 <option key="N" value={false}>
