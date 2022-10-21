@@ -14,7 +14,7 @@ import moment from "moment";
 import Router from "next/router";
 import { Download as DownloadIcon } from "../../icons/download";
 import { Search as SearchIcon } from "../../icons/search";
-import { exportPDF } from "../../utils/exportPdf";
+import { exportPDF } from "../../utils/export-pdf";
 import FilterRadio from "../utils/filterRadio";
 
 const style = {

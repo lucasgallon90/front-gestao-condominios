@@ -45,11 +45,11 @@ const itemsAdmin = [
     icon: <InsightsIcon fontSize="small" />,
     title: "Ocorrências",
   },
-  // {
-  //   href: "/graficos",
-  //   icon: <InsertChartIcon fontSize="small" />,
-  //   title: "Gráficos",
-  // },
+  {
+    href: "/graficos",
+    icon: <InsertChartIcon fontSize="small" />,
+    title: "Gráficos",
+  },
   {
     icon: <SettingsIcon fontSize="small" />,
     title: "Configurações",

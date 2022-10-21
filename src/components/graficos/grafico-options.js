@@ -15,8 +15,17 @@ import {
   TextField,
 } from "@mui/material";
 import { format } from "date-fns";
+import { useForm } from "react-hook-form";
 
-export const GraficoOptions = (props) => {
+export const GraficoOptions = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    clearErrors,
+    setError,
+    formState: { errors },
+  } = useForm();
   const [values, setValues] = useState({
     dataInicial: "2022-01-01",
     dataFinal: format(new Date(), "yyyy-MM-dd"),
@@ -31,7 +40,7 @@ export const GraficoOptions = (props) => {
   };
 
   return (
-    <form autoComplete="off" noValidate {...props}>
+    <form autoComplete="off" noValidate>
       <Card>
         <CardContent>
           <Grid container spacing={3}>
@@ -40,7 +49,7 @@ export const GraficoOptions = (props) => {
                 <FormLabel id="demo-radio-buttons-group-label">Gráficos</FormLabel>
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="female"
+                  defaultValue="fluxoCaixa"
                   name="radio-buttons-group"
                 >
                   <FormControlLabel
@@ -84,7 +93,7 @@ export const GraficoOptions = (props) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained">
+          <Button color="primary" variant="contained" type="submit">
             Gerar
           </Button>
         </Box>
