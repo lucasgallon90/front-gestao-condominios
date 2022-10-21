@@ -1,12 +1,6 @@
 import { Box, Button, Card, CardContent, Divider, Grid } from "@mui/material";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend, Tooltip,
-  XAxis,
-  YAxis
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
+import Router from "next/router";
 
 export const GraficoDetails = (props) => {
   const data = [
@@ -30,7 +24,7 @@ export const GraficoDetails = (props) => {
     <>
       <Card>
         <CardContent>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} sx={{ justifyContent: "center" }}>
             <BarChart
               width={1200}
               height={300}
@@ -60,7 +54,7 @@ export const GraficoDetails = (props) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained">
+          <Button color="primary" variant="contained" onClick={() => Router.back()}>
             Voltar
           </Button>
         </Box>

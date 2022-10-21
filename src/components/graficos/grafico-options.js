@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { Route } from "@mui/icons-material";
 import {
   Box,
   Button,
   Card,
   CardContent,
-  CardHeader,
   Divider,
   FormControl,
   FormControlLabel,
@@ -14,7 +13,9 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { format } from "date-fns";
+import moment from "moment";
+import Router from "next/router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export const GraficoOptions = () => {
@@ -27,8 +28,8 @@ export const GraficoOptions = () => {
     formState: { errors },
   } = useForm();
   const [values, setValues] = useState({
-    dataInicial: "2022-01-01",
-    dataFinal: format(new Date(), "yyyy-MM-dd"),
+    dataInicial: moment().subtract(1, "month").format("YYYY-MM-DD"),
+    dataFinal: moment().format("YYYY-MM-DD"),
     tipoGrafico: "fluxoCaixa",
   });
 
@@ -39,16 +40,20 @@ export const GraficoOptions = () => {
     });
   };
 
+  const onSubmit = () => {
+    Router.push("graficos/view");
+  };
+
   return (
-    <form autoComplete="off" noValidate>
+    <form autoComplete="off" noValidate onSubmit={handleSubmit(() => onSubmit())}>
       <Card>
         <CardContent>
           <Grid container spacing={3}>
             <Grid item md={12} xs={12}>
               <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Gráficos</FormLabel>
+                <FormLabel id="radio-buttons-group-label">Gráficos</FormLabel>
                 <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
+                  aria-labelledby="radio-buttons-group-label"
                   defaultValue="fluxoCaixa"
                   name="radio-buttons-group"
                 >
@@ -63,6 +68,12 @@ export const GraficoOptions = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
+                {...register("dataInicial", {
+                  required: true,
+                  validate: (value) => moment(value).isSameOrBefore(values.dataFinal),
+                })}
+                error={errors.dataInicial ? true : false}
+                helperText={errors.dataInicial ? "Datas incorretas" : ""}
                 label="Data Inicial"
                 name="dataInicial"
                 type="date"
@@ -75,6 +86,12 @@ export const GraficoOptions = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
+                {...register("dataFinal", {
+                  required: true,
+                  validate: (value) => moment(value).isSameOrAfter(values.dataInicial),
+                })}
+                error={errors.dataFinal ? true : false}
+                helperText={errors.dataFinal ? "Datas incorretas" : ""}
                 label="Data Final"
                 name="dataFinal"
                 type="date"

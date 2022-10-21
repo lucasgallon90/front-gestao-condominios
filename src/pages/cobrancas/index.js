@@ -8,10 +8,10 @@ import api from "../../services/api";
 import { formatarData } from "../../utils";
 
 const filters = [
-  { label: "Data", value: "createdAt" },
+  { label: "Data", value: "createdAt", type: "date" },
   { label: "Descrição", value: "descricao" },
-  { label: "Data Vcto.", value: "dataVencimento" },
-  { label: "Data Pgto.", value: "dataVencimento" },
+  { label: "Data Vcto.", value: "dataVencimento", type: "date" },
+  { label: "Data Pgto.", value: "dataPagamento", type: "date" },
 ];
 
 const Cobrancas = () => {
