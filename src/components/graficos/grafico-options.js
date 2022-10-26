@@ -17,6 +17,8 @@ import moment from "moment";
 import Router from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export const GraficoOptions = () => {
   const {
@@ -41,7 +43,14 @@ export const GraficoOptions = () => {
   };
 
   const onSubmit = () => {
-    Router.push("graficos/view");
+    if (moment(values.dataFinal).diff(values.dataInicial, "months") > 12) {
+      Swal.fire("Período deve ser menor que 12 meses", "", "warning");
+      return;
+    }
+    Router.push({
+      pathname: "graficos/view",
+      query: { dataInicial: values.dataInicial, dataFinal: values.dataFinal },
+    });
   };
 
   return (

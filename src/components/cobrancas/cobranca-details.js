@@ -30,6 +30,7 @@ import api from "../../services/api";
 import { formatarMoeda } from "../../utils/index";
 import { printPDF } from "../../utils/print-pdf-cobranca";
 import AutoComplete from "../common/auto-complete";
+import NumericInput from "../common/numeric-input";
 
 export const CobrancaDetails = ({ id, operation, onlyView }) => {
   const { user } = useUser();
@@ -247,19 +248,14 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <TextField
-                {...register("total", {
-                  required: true,
-                })}
-                error={errors.total ? true : false}
-                helperText={errors.total ? "Campo obrigatório" : ""}
+              <NumericInput
                 fullWidth
+                label="Valor"
+                name="valor"
+                onChange={handleChange}
                 required
                 disabled={onlyView}
-                onChange={handleChange}
-                label="Valor Total"
-                name="valor"
-                value={formatarMoeda(values.valor || 0)}
+                value={values.valor}
                 variant="outlined"
               />
             </Grid>
