@@ -1,12 +1,11 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
-import { useEffect } from "react";
+import { parseCookies } from "nookies";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { GraficoDetails } from "../../components/graficos/grafico-details";
-import { setCookie, parseCookies } from "nookies";
 import api from "../../services/api";
 
-const GraficoView = ({ data }) => {
+const GraficoView = ({ data, dataInicial, dataFinal }) => {
   return (
     <>
       <Head>
@@ -24,7 +23,7 @@ const GraficoView = ({ data }) => {
             Gráfico - Fluxo de Caixa
           </Typography>
           <Box sx={{ mt: 3 }}>
-            <GraficoDetails dataGrafico={data} />
+            <GraficoDetails dataGrafico={data} dataInicial={dataInicial} dataFinal={dataFinal}/>
           </Box>
         </Container>
       </Box>
@@ -52,6 +51,6 @@ export async function getServerSideProps(context) {
     .then((res) => res.data)
     .catch(() => []);
   return {
-    props: { data },
+    props: { data, dataInicial, dataFinal },
   };
 }

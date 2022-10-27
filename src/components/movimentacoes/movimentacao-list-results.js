@@ -5,6 +5,7 @@ import {
   Card,
   Chip,
   IconButton,
+  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -94,6 +95,22 @@ export const MovimentacaoListResults = ({
                 </TableRow>
               </TableHead>
               <TableBody>
+              {movimentacoes?.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={1000} sx={{ textAlign: "center" }}>
+                      <Box>
+                        {loading ? (
+                          <>
+                            Carregando...
+                            <LinearProgress />
+                          </>
+                        ) : (
+                          "Nenhum registro encontrado"
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
                 {movimentacoes.map((movimentacao) => (
                   <TableRow
                     hover
