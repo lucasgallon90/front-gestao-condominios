@@ -1,9 +1,6 @@
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Box, Button, Card, CardContent, Divider, Grid, TextField } from "@mui/material";
-import { format } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import moment from "moment";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -12,7 +9,6 @@ import api from "../../services/api";
 import { formatarMoeda } from "../../utils";
 import AutoComplete from "../common/auto-complete";
 import NumericInput from "../common/numeric-input";
-import moment from "moment";
 
 export const LeituraDetails = ({ id, operation, onlyView }) => {
   const {
@@ -31,7 +27,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
     valor: 0,
     valorTotal: 0,
     tipoLeitura: undefined,
-    mesAno: new Date(),
+    mesAno: moment().format("YYYY-MM"),
   });
   const [moradores, setMoradores] = useState([]);
   const [tiposLeitura, setTiposLeitura] = useState([]);
@@ -180,7 +176,10 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Não foi possível cadastrar o registro, tente novamente mais tarde");
+        toast.error(
+          error?.response?.data?.message ||
+            "Não foi possível cadastrar o registro, tente novamente mais tarde"
+        );
       });
   }
 
@@ -230,7 +229,7 @@ export const LeituraDetails = ({ id, operation, onlyView }) => {
                 disabled={onlyView}
                 value={moment(values.mesAno + "-01").toDate()}
                 onChange={(newValue) => {
-                  setValues({ ...values, mesAno: format(new Date(newValue), "yyyy-MM") });
+                  setValues({ ...values, mesAno: moment(newValue).format("YYYY-MM") });
                 }}
                 renderInput={(params) => <TextField {...params} fullWidth helperText={null} />}
               />
