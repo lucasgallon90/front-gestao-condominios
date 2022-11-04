@@ -337,6 +337,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                 variant="contained"
                 disabled={!values.morador}
                 onClick={loadContasLeituras}
+                name="carregarContas"
               >
                 Carregar
               </Button>

@@ -10,18 +10,13 @@ export const cobrancas = [
     dataPagamento: new Date(),
     dataVencimento: new Date(),
     createdAt: new Date(),
-    itemsCobranca:[
-      {
-        id: uuid(),
-        descricao: "Conta Luz Março/2022",
-        valorTotal: 50,
-        valorRateado: 5,
-        leitura:0,
-        dataPagamento: new Date(),
-        dataVencimento: new Date(),
-        tipoMovimentacao: { descricao: "Conta à pagar", tipo: "S" },
-        createdAt: randomDate(new Date(2022, 0, 1), new Date()),
-      },
-    ]
+  },{
+    _id: uuid(),
+    descricao: "Condominio Novembro/2022 Apto 401",
+    valor: 80,
+    mesAno: "11/2022",
+    dataPagamento: new Date(),
+    dataVencimento: new Date(),
+    createdAt: new Date(),
   },
 ];

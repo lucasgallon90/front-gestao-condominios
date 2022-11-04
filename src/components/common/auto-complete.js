@@ -41,6 +41,7 @@ export default function AutoComplete(props) {
       onClose={() => {
         setOpen(false);
       }}
+      name={name}
       onKeyUp={handleChangeKey}
       value={selectedValue}
       disabled={disabled}
