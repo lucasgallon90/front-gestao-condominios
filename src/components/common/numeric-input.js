@@ -12,6 +12,7 @@ export default function NumericInput(props) {
   } = props;
   return (
     <NumericFormat
+      name={name}
       value={value}
       prefix={prefix}
       decimalScale={decimalScale}

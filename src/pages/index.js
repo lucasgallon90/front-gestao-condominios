@@ -11,8 +11,9 @@ import { TotalSaidas } from "../components/dashboard/total-saidas";
 import { UltimasOcorrencias } from "../components/dashboard/ultimas-ocorrencias";
 import { useUser } from "../contexts/authContext";
 import nookies from "nookies";
+import { useState } from "react";
 
-const Dashboard = (props) => {
+const Dashboard = () => {
   const { user } = useUser();
   return (
     <>
@@ -31,13 +32,13 @@ const Dashboard = (props) => {
             {user?.tipoUsuario === "admin" && (
               <>
                 <Grid item lg={3} sm={6} xl={3} xs={12}>
-                  <TotalEntradas />
+                  <TotalEntradas/>
                 </Grid>
                 <Grid item xl={3} lg={3} sm={6} xs={12}>
-                  <TotalSaidas />
+                  <TotalSaidas/>
                 </Grid>
                 <Grid item xl={3} lg={3} sm={6} xs={12}>
-                  <SaldoDeCaixa />
+                  <SaldoDeCaixa/>
                 </Grid>
                 <Grid item xl={3} lg={3} sm={6} xs={12}>
                   <TotalOcorrencias sx={{ height: "100%" }} />

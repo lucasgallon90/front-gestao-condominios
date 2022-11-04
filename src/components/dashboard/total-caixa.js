@@ -13,7 +13,7 @@ import api from "../../services/api";
 import { formatarMoeda } from "../../utils/index";
 import DialogSaldoInicialCaixa from "./dialog-saldo-caixa-inicial";
 
-export const SaldoDeCaixa = (props) => {
+export const SaldoDeCaixa = () => {
   const [loading, setLoading] = useState(true);
   const [openDialogSaldoInicial, setOpenDialogSaldoInicial] = useState(false);
   const [saldoAtual, setSaldoAtual] = useState(0);
@@ -40,7 +40,7 @@ export const SaldoDeCaixa = (props) => {
         setOpen={setOpenDialogSaldoInicial}
         refreshData={loadSaldoAtual}
       ></DialogSaldoInicialCaixa>
-      <Card sx={{ height: "100%" }} {...props}>
+      <Card sx={{ height: "100%" }}>
         <CardContent>
           <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
             <Grid item>

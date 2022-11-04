@@ -4,7 +4,7 @@ import { randomDate } from "../utils/index.js";
 export const tiposMovimentacao = [
   {
     _id: uuid(),
-    descricao: "Cobrança",
+    descricao: "Conta à receber",
     tipo: "E",
     createdAt: randomDate(new Date(2022, 0, 1), new Date()),
   },

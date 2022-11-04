@@ -19,6 +19,7 @@ export const TipoMovimentacaoDetails = ({ id, operation, onlyView }) => {
   });
 
   useEffect(() => {
+    reset({ ...values});
     operation != "add" && getTipoMovimentacao();
   }, []);
 
@@ -47,6 +48,7 @@ export const TipoMovimentacaoDetails = ({ id, operation, onlyView }) => {
       newValues = { ...newValues, gerarCobranca: false };
     }
     setValues({ ...newValues });
+    reset({ ...newValues});
   };
 
   async function onSubmit() {

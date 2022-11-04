@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { formatarMoeda } from "../../utils";
 
-export const TotalEntradas = (props) => {
+export const TotalEntradas = () => {
   const [loading, setLoading] = useState(true);
   const [totalEntradas, setTotalEntradas] = useState(0);
   useEffect(async () => {
     await api
       .get("caixa/total-entradas")
       .then((res) => {
-        res.data && setTotalEntradas(res.data.total);
+          res.data && setTotalEntradas(res.data.total);
       })
       .catch((error) => {
         console.log(error);
@@ -20,7 +20,7 @@ export const TotalEntradas = (props) => {
   }, []);
 
   return (
-    <Card sx={{ height: "100%" }} {...props}>
+    <Card sx={{ height: "100%" }}>
       <CardContent>
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
