@@ -181,7 +181,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
                 multiline
                 rows={3}
                 onChange={handleChange}
-                value={values.descricao}
+                value={values.descricao || ""}
                 variant="outlined"
               />
             </Grid>
