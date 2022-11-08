@@ -1,10 +1,13 @@
+import { Box, Button, Container } from "@mui/material";
 import Head from "next/head";
-import { Box, Container } from "@mui/material";
-import { MoradorListResults } from "../../components/moradores/morador-list-results";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import { SearchToolbar } from "../../components/common/search-toolbar";
 import { DashboardLayout } from "../../components/dashboard-layout";
-import { moradores } from "../../__mocks__/moradores";
-import { useEffect, useState } from "react";
+import DialogConviteEmail from "../../components/moradores/convite-email-dialog";
+import { MoradorListResults } from "../../components/moradores/morador-list-results";
 import api from "../../services/api";
 
 const filters = [
@@ -21,6 +24,8 @@ const Moradores = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [openDialogConviteEmail, setOpenDialogConviteEmail] = useState(false);
+  const { asPath } = useRouter();
 
   useEffect(() => {
     list();
@@ -42,8 +47,44 @@ const Moradores = () => {
       .finally(() => setLoading(false));
   }
 
+  function handleClickConvite() {
+    Swal.fire({
+      icon: "info",
+      title: "Selecione abaixo a opção de convite",
+      showCancelButton: true,
+      showDenyButton: true,
+      confirmButtonColor: "#3085d6",
+      denyButtonColor: "#9b59b6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Copia & cola",
+      denyButtonText: "Email",
+      cancelButtonText: "Cancelar",
+    }).then(async (value) => {
+      if (value.isConfirmed) {
+        const link = await api
+          .get("usuarios/convite-registro-link")
+          .then((res) => res.data.link)
+          .catch(() => {
+            toast.error("Não foi possível obter o link, tente novamente mais tarde!");
+            return "";
+          });
+        if (link) {
+          navigator.clipboard.writeText(link);
+          toast.success("Link copiado com sucesso!");
+        }
+      }
+      if (value.isDenied) {
+        setOpenDialogConviteEmail(true);
+      }
+    });
+  }
+
   return (
     <>
+      <DialogConviteEmail
+        open={openDialogConviteEmail}
+        setOpen={setOpenDialogConviteEmail}
+      ></DialogConviteEmail>
       <Head>
         <title>Moradores | Gestão de Condomínios</title>
       </Head>
@@ -73,6 +114,11 @@ const Moradores = () => {
               { label: "Email", key: "email" },
             ]}
             addButtonHide
+            extraButton={
+              <Button id="add" color="primary" variant="contained" onClick={handleClickConvite}>
+                Convite
+              </Button>
+            }
           />
 
           <Box sx={{ mt: 3 }}>

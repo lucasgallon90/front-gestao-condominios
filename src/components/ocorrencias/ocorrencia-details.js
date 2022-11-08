@@ -59,7 +59,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
             situacao: res.data.situacao,
             respostaAdmin: res.data.respostaAdmin,
           });
-        reset(values);
+          reset({...values})
         return res.data;
       })
       .catch((error) => console.log(error));
@@ -124,6 +124,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
       ...values,
       [event.target.name]: event.target.value,
     });
+    reset({...values})
   };
 
   return (
@@ -180,7 +181,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
                 multiline
                 rows={3}
                 onChange={handleChange}
-                value={values.descricao}
+                value={values.descricao || ""}
                 variant="outlined"
               />
             </Grid>

@@ -108,6 +108,9 @@ export const SearchToolbar = ({
                 Adicionar
               </Button>
             )}
+               {props.extraButton && (
+              <>{props.extraButton}</>
+            )}
           </Box>
         </Box>
         <Box sx={{ mt: 3 }}>

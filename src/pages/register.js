@@ -3,13 +3,11 @@ import { useFormik } from "formik";
 import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useUser } from "../contexts/authContext";
 import * as Yup from "yup";
+import { useUser } from "../contexts/authContext";
 import { Google as GoogleIcon } from "../icons/google";
-import nookies from "nookies";
-import toast from "react-hot-toast";
 
-const Register = ({ googleId, email }) => {
+const Register = ({ googleId, email, codigoCondominio }) => {
   const user = useUser();
   const router = useRouter();
   const formik = useFormik({
@@ -19,7 +17,7 @@ const Register = ({ googleId, email }) => {
       telefone: "",
       apto: "",
       senha: "",
-      codigoCondominio: "",
+      codigoCondominio: codigoCondominio || "",
       apto: "",
       bloco: "",
       googleId: googleId,
@@ -111,6 +109,7 @@ const Register = ({ googleId, email }) => {
                   fullWidth
                   helperText={formik.touched.codigoCondominio && formik.errors.codigoCondominio}
                   label="Código do Condomínio"
+                  disabled={codigoCondominio}
                   name="codigoCondominio"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -239,6 +238,7 @@ export async function getServerSideProps({ query }) {
   let props = {
     googleId: query.id || null,
     email: query.email || null,
+    codigoCondominio: query.codigoCondominio || null
   };
   return { props };
 }
