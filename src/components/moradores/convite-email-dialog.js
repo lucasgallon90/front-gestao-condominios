@@ -6,15 +6,21 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 
 export default function DialogConviteEmail({ open, setOpen }) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const handleChangeEmail = (event) => {
-    setEmail(event.target.value || 0);
+    setEmail(event.target.value || "");
   };
 
   const handleClickConfirmar = () => {
@@ -45,13 +51,22 @@ export default function DialogConviteEmail({ open, setOpen }) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <form>
+        <form noValidate onSubmit={handleSubmit(() => handleClickConfirmar())}>
           <DialogTitle>Convite por email</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Informe o email abaixo para enviar o convite de cadastro no condomínio.
             </DialogContentText>
             <TextField
+              {...register("email", {
+                required: "Email é obrigatório",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Email Inválido",
+                },
+              })}
+              error={errors.email ? true : false}
+              helperText={errors.email ? errors.email.message : ""}
               fullWidth
               autoComplete="off"
               label="Email"
@@ -65,7 +80,7 @@ export default function DialogConviteEmail({ open, setOpen }) {
             <Button disabled={loading} onClick={handleClose}>
               Cancelar
             </Button>
-            <Button disabled={loading} onClick={handleClickConfirmar}>
+            <Button disabled={loading} type="submit">
               {loading && <CircularProgress size={14} />}
               {!loading && "Confirmar"}
             </Button>
