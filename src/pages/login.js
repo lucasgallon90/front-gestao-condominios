@@ -174,21 +174,42 @@ const Login = () => {
                 Entrar
               </Button>
             </Box>
-            <Typography color="textSecondary" variant="body2">
-              Não tem uma conta?{" "}
-              <NextLink href="/register">
-                <Link
-                  to="/register"
-                  variant="subtitle2"
-                  underline="hover"
-                  sx={{
-                    cursor: "pointer",
-                  }}
-                >
-                  Cadastre-se
-                </Link>
-              </NextLink>
-            </Typography>
+            <Grid container spacing={3} justifyContent="center">
+              <Grid item>
+                <Typography color="textSecondary" variant="body2">
+                  Não tem uma conta?{" "}
+                  <NextLink href="/register">
+                    <Link
+                      to="/register"
+                      variant="subtitle2"
+                      underline="hover"
+                      sx={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      Cadastre-se
+                    </Link>
+                  </NextLink>
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography color="textSecondary" variant="body2">
+                  Esqueceu a senha?{" "}
+                  <NextLink href="/recuperar-senha">
+                    <Link
+                      to="/recuperar-senha"
+                      variant="subtitle2"
+                      underline="hover"
+                      sx={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      Recuperar
+                    </Link>
+                  </NextLink>
+                </Typography>
+              </Grid> 
+            </Grid>
           </form>
         </Container>
       </Box>
