@@ -15,6 +15,7 @@ const TiposMovimentacao = () => {
   const [tiposMovimentacao, setTiposMovimentacao] = useState([]);
   const [filterValue, setFilterValue] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
+  const [totalRows, setTotalRows] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ const TiposMovimentacao = () => {
       .post("tipos-movimentacao/list", filter, { params: { limit, page } })
       .then((res) => {
         setTiposMovimentacao(res.data);
+        setTotalRows(Number(res.headers["x-total-count"] || 0));
       })
       .catch((error) => {
         console.log(error);
@@ -84,6 +86,7 @@ const TiposMovimentacao = () => {
               setPage={setPage}
               limit={limit}
               setLimit={setLimit}
+              totalRows={totalRows}
               refreshData={list}
               loading={loading}
             />

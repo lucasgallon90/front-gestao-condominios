@@ -32,6 +32,7 @@ export const MovimentacaoListResults = ({
   setPage,
   limit,
   setLimit,
+  totalRows=0,
   loading = true,
   ...rest
 }) => {
@@ -168,7 +169,7 @@ export const MovimentacaoListResults = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={movimentacoes?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

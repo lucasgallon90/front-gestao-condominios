@@ -14,6 +14,7 @@ const filters = [
 
 const Caixa = () => {
   const [caixa, setCaixa] = useState([]);
+  const [totalRows, setTotalRows] = useState(0);
   const [filterValue, setFilterValue] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [limit, setLimit] = useState(10);
@@ -33,6 +34,7 @@ const Caixa = () => {
       .post("caixa/consolidado", filter, { params: { limit, page } })
       .then((res) => {
         setCaixa(res.data);
+        setTotalRows(Number(res.headers["x-total-count"] || 0));
       })
       .catch((error) => {
         console.log(error);
@@ -78,6 +80,7 @@ const Caixa = () => {
           <Box sx={{ mt: 3 }}>
             <CaixaListResults
               caixa={caixa}
+              totalRows={totalRows}
               page={page - 1}
               setPage={setPage}
               limit={limit}

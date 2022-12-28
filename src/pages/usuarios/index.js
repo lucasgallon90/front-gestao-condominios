@@ -18,6 +18,7 @@ const Usuarios = () => {
   const [filterValue, setFilterValue] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [limit, setLimit] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -34,6 +35,7 @@ const Usuarios = () => {
       .post("usuarios/list", filter, { params: { limit, page } })
       .then((res) => {
         setUsuarios(res.data);
+        setTotalRows(Number(res.headers["x-total-count"] || 0));
       })
       .catch((error) => {
         console.log(error);
@@ -79,6 +81,7 @@ const Usuarios = () => {
               setPage={setPage}
               limit={limit}
               setLimit={setLimit}
+              totalRows={totalRows}
               refreshData={list}
               loading={loading}
             />

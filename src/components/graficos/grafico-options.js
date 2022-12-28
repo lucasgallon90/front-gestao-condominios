@@ -30,7 +30,7 @@ export const GraficoOptions = () => {
     formState: { errors },
   } = useForm();
   const [values, setValues] = useState({
-    dataInicial: moment().subtract(1, "month").format("YYYY-MM-DD"),
+    dataInicial: moment().subtract(12, "month").format("YYYY-MM-DD"),
     dataFinal: moment().format("YYYY-MM-DD"),
     tipoGrafico: "fluxoCaixa",
   });

@@ -22,10 +22,10 @@ const Moradores = () => {
   const [filterValue, setFilterValue] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [limit, setLimit] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [openDialogConviteEmail, setOpenDialogConviteEmail] = useState(false);
-  const { asPath } = useRouter();
 
   useEffect(() => {
     list();
@@ -40,6 +40,7 @@ const Moradores = () => {
       .post("usuarios/list/moradores", filter, { params: { limit, page } })
       .then((res) => {
         setMoradores(res.data);
+        setTotalRows(Number(res.headers["x-total-count"] || 0));
       })
       .catch((error) => {
         console.log(error);
@@ -126,6 +127,7 @@ const Moradores = () => {
               moradores={moradores}
               page={page - 1}
               setPage={setPage}
+              totalRows={totalRows}
               limit={limit}
               setLimit={setLimit}
               refreshData={list}

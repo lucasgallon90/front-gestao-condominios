@@ -33,6 +33,7 @@ export const TiposLeituraListResults = ({
   setPage,
   limit,
   setLimit,
+  totalRows=0,
   loading = true,
   ...rest
 }) => {
@@ -149,7 +150,7 @@ export const TiposLeituraListResults = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={tiposLeitura?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

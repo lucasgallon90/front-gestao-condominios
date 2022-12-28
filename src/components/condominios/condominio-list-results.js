@@ -31,6 +31,7 @@ export const CondominioListResults = ({
   setPage,
   limit,
   setLimit,
+  totalRows = 0,
   ...rest
 }) => {
   const handleLimitChange = (event) => {
@@ -132,7 +133,7 @@ export const CondominioListResults = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={condominios?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

@@ -8,13 +8,13 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   Typography
 } from "@mui/material";
 import PropTypes from "prop-types";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { formatarData, formatarMoeda } from "../../utils";
-import { TablePaginationComponent } from "../common/table-pagination";
 
 export const CaixaListResults = ({
   caixa,
@@ -23,6 +23,7 @@ export const CaixaListResults = ({
   limit,
   setLimit,
   loading = true,
+  totalRows = 0,
   ...rest
 }) => {
   const handleLimitChange = (event) => {
@@ -74,14 +75,14 @@ export const CaixaListResults = ({
           </TableContainer>
         </Box>
       </PerfectScrollbar>
-      <TablePaginationComponent
+      <TablePagination
         component="div"
-        count={caixa?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[]}
       />
     </Card>
   );

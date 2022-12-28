@@ -34,6 +34,7 @@ export const MoradorListResults = ({
   setPage,
   limit,
   setLimit,
+  totalRows=0,
   loading = true,
   ...rest
 }) => {
@@ -163,7 +164,7 @@ export const MoradorListResults = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={moradores?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

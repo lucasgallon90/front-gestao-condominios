@@ -22,6 +22,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import api from "../../services/api";
 import { formatarData, formatarMoeda } from "../../utils";
+import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 
 export const CobrancaListResults = ({
   cobrancas,
@@ -30,6 +31,7 @@ export const CobrancaListResults = ({
   setPage,
   limit,
   setLimit,
+  totalRows = 0,
   loading = true,
   ...rest
 }) => {
@@ -116,8 +118,12 @@ export const CobrancaListResults = ({
                     <TableCell>{formatarData(cobranca.createdAt)}</TableCell>
                     <TableCell>{cobranca.descricao}</TableCell>
                     <TableCell>{formatarMoeda(cobranca.valor)}</TableCell>
-                    <TableCell>{cobranca.dataVencimento ? formatarData(cobranca.dataVencimento) : "-"}</TableCell>
-                    <TableCell>{cobranca.dataPagamento ? formatarData(cobranca.dataPagamento) : "-"}</TableCell>
+                    <TableCell>
+                      {cobranca.dataVencimento ? formatarData(cobranca.dataVencimento) : "-"}
+                    </TableCell>
+                    <TableCell>
+                      {cobranca.dataPagamento ? formatarData(cobranca.dataPagamento) : "-"}
+                    </TableCell>
                     <TableCell>
                       <Tooltip title="Editar">
                         <IconButton
@@ -137,6 +143,15 @@ export const CobrancaListResults = ({
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
+                      <Tooltip title="Enviar cobrança por email">
+                        <IconButton
+                          onClick={(event) => handleClickDeletar(event, cobranca._id)}
+                          aria-label="print"
+                          color="warning"
+                        >
+                          <LocalPrintshopIcon />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -147,7 +162,7 @@ export const CobrancaListResults = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={cobrancas?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Container,
   FormControlLabel,
   FormHelperText,
@@ -20,6 +21,7 @@ import { useUser } from "../contexts/authContext";
 import { useEffect, useState } from "react";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const [failedOAuth, setFailedOauth] = useState(null);
   const [lembrarMe, setLembrarMe] = useState(true);
   const user = useUser();
@@ -48,9 +50,11 @@ const Login = () => {
   }, [router.query]);
 
   async function handleSubmitLogin(values, setSubmitting) {
+    setLoading(true);
     const result = await user.signIn(values);
     if (!result) {
       setSubmitting(false);
+      setLoading(false);
     } else {
       if (lembrarMe) {
         localStorage.setItem("gc.email", values.email);
@@ -171,7 +175,8 @@ const Login = () => {
                 type="submit"
                 variant="contained"
               >
-                Entrar
+                {loading && <CircularProgress size={24} />}
+                {!loading && "Entrar"}
               </Button>
             </Box>
             <Grid container spacing={3} justifyContent="center">
@@ -208,7 +213,7 @@ const Login = () => {
                     </Link>
                   </NextLink>
                 </Typography>
-              </Grid> 
+              </Grid>
             </Grid>
           </form>
         </Container>

@@ -18,6 +18,7 @@ const Ocorrencias = () => {
   const [ocorrencias, setOcorrencias] = useState([]);
   const [filterValue, setFilterValue] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
+  const [totalRows, setTotalRows] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ const Ocorrencias = () => {
       .post("ocorrencias/list", filter, { params: { limit, page } })
       .then((res) => {
         setOcorrencias(res.data);
+        setTotalRows(Number(res.headers["x-total-count"] || 0));
       })
       .catch((error) => {
         console.log(error);
@@ -88,6 +90,7 @@ const Ocorrencias = () => {
               setPage={setPage}
               limit={limit}
               setLimit={setLimit}
+              totalRows={totalRows}
               refreshData={list}
               loading={loading}
             />

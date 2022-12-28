@@ -33,6 +33,7 @@ export const UsuarioListResults = ({
   setPage,
   limit,
   setLimit,
+  totalRows = 0,
   loading = true,
   ...rest
 }) => {
@@ -170,7 +171,7 @@ export const UsuarioListResults = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={usuarios?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

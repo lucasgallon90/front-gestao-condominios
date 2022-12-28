@@ -17,6 +17,7 @@ const filters = [
 const Cobrancas = () => {
   const [cobrancas, setCobrancas] = useState([]);
   const [filterValue, setFilterValue] = useState(null);
+  const [totalRows, setTotalRows] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -35,6 +36,7 @@ const Cobrancas = () => {
       .post("cobrancas/list", filter, { params: { limit, page } })
       .then((res) => {
         setCobrancas(res.data);
+        setTotalRows(Number(res.headers["x-total-count"] || 0));
       })
       .catch((error) => {
         console.log(error);
@@ -87,6 +89,7 @@ const Cobrancas = () => {
               cobrancas={cobrancas}
               page={page - 1}
               setPage={setPage}
+              totalRows={totalRows}
               limit={limit}
               setLimit={setLimit}
               refreshData={list}

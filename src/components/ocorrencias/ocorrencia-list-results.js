@@ -13,17 +13,16 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
+  Tooltip
 } from "@mui/material";
-import { format } from "date-fns";
 import Router from "next/router";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import api from "../../services/api";
 import Swal from "sweetalert2";
-import { Chip } from "../chip";
+import api from "../../services/api";
 import { formatarData } from "../../utils";
+import { Chip } from "../chip";
 
 export const OcorrenciaListResults = ({
   ocorrencias,
@@ -32,6 +31,7 @@ export const OcorrenciaListResults = ({
   setPage,
   limit,
   setLimit,
+  totalRows=0,
   loading = true,
   ...rest
 }) => {
@@ -156,7 +156,7 @@ export const OcorrenciaListResults = ({
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={ocorrencias?.length}
+        count={totalRows}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
