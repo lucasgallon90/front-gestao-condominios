@@ -20,10 +20,14 @@ const Caixa = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [saldoCaixaAtual, setSaldoCaixaAtual] = useState(0);
+  const [saldoCaixaInicial, setSaldoCaixaInicial] = useState(0);
 
   useEffect(() => {
     list();
   }, [page, limit]);
+
+  useEffect(() => loadSaldoAtual(), []);
 
   async function list(value) {
     setLoading(true);
@@ -41,6 +45,18 @@ const Caixa = () => {
       })
       .finally(() => setLoading(false));
   }
+
+  const loadSaldoAtual = async () => {
+    setLoading(true);
+    await api
+      .get("caixa/saldo-atual")
+      .then((res) => {
+        setSaldoCaixaAtual(res.data.saldoCaixaAtual);
+        setSaldoCaixaInicial(res.data.saldoCaixaInicial);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  };
 
   return (
     <>
@@ -87,6 +103,8 @@ const Caixa = () => {
               setLimit={setLimit}
               refreshData={list}
               loading={loading}
+              saldoCaixaAtual={saldoCaixaAtual}
+              saldoCaixaInicial={saldoCaixaInicial}
             />
           </Box>
         </Container>

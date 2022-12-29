@@ -16,7 +16,6 @@ const TiposLeitura = () => {
   const [filterValue, setFilterValue] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [totalRows, setTotalRows] = useState(0);
-  const [totalRows, setTotalRows] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);

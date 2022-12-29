@@ -6,17 +6,20 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  IconButton,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { formatarMoeda } from "../../utils/index";
 import DialogSaldoInicialCaixa from "./dialog-saldo-caixa-inicial";
+import EditIcon from "@mui/icons-material/Edit";
 
 export const SaldoDeCaixa = () => {
   const [loading, setLoading] = useState(true);
   const [openDialogSaldoInicial, setOpenDialogSaldoInicial] = useState(false);
   const [saldoAtual, setSaldoAtual] = useState(0);
+  const [saldoInicial, setSaldoInicial] = useState(0);
 
   useEffect(() => {
     loadSaldoAtual();
@@ -27,7 +30,8 @@ export const SaldoDeCaixa = () => {
     await api
       .get("caixa/saldo-atual")
       .then((res) => {
-        res.data && setSaldoAtual(res.data.saldoCaixaAtual);
+        setSaldoAtual(res.data.saldoCaixaAtual);
+        setSaldoInicial(res.data.saldoCaixaInicial);
       })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
@@ -36,6 +40,7 @@ export const SaldoDeCaixa = () => {
   return (
     <>
       <DialogSaldoInicialCaixa
+        saldoInicial={saldoInicial}
         open={openDialogSaldoInicial}
         setOpen={setOpenDialogSaldoInicial}
         refreshData={loadSaldoAtual}
@@ -62,10 +67,21 @@ export const SaldoDeCaixa = () => {
                 <InsertChartIcon />
               </Avatar>
             </Grid>
-            <Grid item>
-              <Button variant="outlined" onClick={() => setOpenDialogSaldoInicial(true)}>
-                Informar saldo inicial de caixa
-              </Button>
+            <Grid item xs={12}>
+              {!saldoAtual ? (
+                <Button variant="outlined" onClick={() => setOpenDialogSaldoInicial(true)}>
+                  Informar saldo inicial de caixa
+                </Button>
+              ) : (
+                <div>
+                  <Typography color="textSecondary" variant="caption">
+                    Saldo Inicial: {formatarMoeda(saldoInicial)}
+                  </Typography>
+                  <IconButton onClick={() => setOpenDialogSaldoInicial(true)}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </div>
+              )}
             </Grid>
           </Grid>
         </CardContent>

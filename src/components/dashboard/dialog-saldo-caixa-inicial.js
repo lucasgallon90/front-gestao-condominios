@@ -4,13 +4,19 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 import NumericInput from "../common/numeric-input";
 
-export default function DialogSaldoInicialCaixa({ open, setOpen, refreshData }) {
+export default function DialogSaldoInicialCaixa({ open, setOpen, refreshData, saldoInicial: saldoInicialProps }) {
   const [saldoInicial, setSaldoInicial] = useState(0);
+
+  useEffect(()=>{
+    if(open){
+      setSaldoInicial(saldoInicialProps)
+    }
+  },[open])
 
   const handleChangeSaldoInicial = (event) => {
     setSaldoInicial(event.target.value || 0);

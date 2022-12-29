@@ -7,10 +7,11 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -24,6 +25,8 @@ export const CaixaListResults = ({
   setLimit,
   loading = true,
   totalRows = 0,
+  saldoCaixaAtual = 0,
+  saldoCaixaInicial = 0,
   ...rest
 }) => {
   const handleLimitChange = (event) => {
@@ -71,6 +74,17 @@ export const CaixaListResults = ({
                   </TableRow>
                 ))}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={2} />
+                  <Typography variant="caption">
+                    Total Inicial: {formatarMoeda(saldoCaixaInicial)}
+                  </Typography>
+                  <Typography>
+                    <b>Total Atual: </b> {formatarMoeda(saldoCaixaAtual)}
+                  </Typography>
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Box>
