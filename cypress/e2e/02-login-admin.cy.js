@@ -7,3 +7,11 @@ describe("Login - Admin", () => {
     cy.url().should("include", "/");
   });
 });
+
+describe("Recuperar senha", () => {
+  it("Recuperar a senha por email", () => {
+    cy.visit("/recuperar-senha");
+    cy.get("input[name=email]").clear().type(admin.email).type(`${admin.senha}{enter}`);
+    cy.url().should("include", "/");
+  });
+});

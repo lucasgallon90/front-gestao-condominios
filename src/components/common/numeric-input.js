@@ -5,7 +5,7 @@ export default function NumericInput(props) {
   const {
     value = 0,
     onChange = () => {},
-    prefix = "R$",
+    prefix = "R$ ",
     name,
     decimalScale = 2,
     ...params
@@ -16,6 +16,7 @@ export default function NumericInput(props) {
       value={value}
       prefix={prefix}
       decimalScale={decimalScale}
+      allowedDecimalSeparators={[",","."]}
       decimalSeparator={","}
       onValueChange={(values) => {
         const target = {

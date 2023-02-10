@@ -13,6 +13,7 @@ import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import * as Yup from "yup";
 import { useUser } from "../contexts/authContext";
 import api from "../services/api";
@@ -38,7 +39,12 @@ const RecuperarSenha = () => {
     setLoading(true);
     api
       .post("usuarios/recuperar-senha", { email })
-      .then((res) => console.log(res.data))
+      .then((_res) => {
+        toast.success(
+          "Email enviado com sucesso, confira sua caixa de entrada para recuperar sua senha"
+        );
+        router.push("/");
+      })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }
@@ -116,4 +122,3 @@ const RecuperarSenha = () => {
 };
 
 export default RecuperarSenha;
-

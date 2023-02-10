@@ -25,6 +25,7 @@ const App = (props) => {
         </Head>
         <Toaster
           position="top-right"
+          containerClassName="toaster"
           toastOptions={{
             error: {
               duration: 3000,

@@ -27,6 +27,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import Swal from "sweetalert2";
 import { useUser } from "../../contexts/authContext";
 import api from "../../services/api";
+import { imprimirCobranca } from "../../services/pdf";
 import { formatarMoeda } from "../../utils/index";
 import { printPDF } from "../../utils/print-pdf-cobranca";
 import AutoComplete from "../common/auto-complete";
@@ -137,57 +138,6 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
     } else {
       setValues({ ...values, morador: undefined });
     }
-  };
-
-  const handleClickImprimir = () => {
-    const pdf = printPDF({
-      title: "Cobrança",
-      header: [
-        { label: "Nome", value: values.morador.nome },
-        {
-          label: `Apto${values.morador.bloco ? "/Bloco" : ""}`,
-          value: values.morador.bloco
-            ? `${values.morador.apto}/${values.morador.bloco}`
-            : values.morador.apto,
-        },
-        {
-          label: "Descrição",
-          value: values.descricao,
-        },
-        {
-          label: "Data Vencimento",
-          value: values.dataVencimento ? moment(values.dataVencimento).format("DD/MM/YY") : "-",
-        },
-        {
-          label: "Data Pagamento",
-          value: values.dataPagamento ? moment(values.dataPagamento).format("DD/MM/YY") : "-",
-        },
-        {
-          label: "Mês/Ano",
-          value: moment(values.mesAno + "-01").format("MM/YYYY"),
-        },
-      ],
-      columnHead: [
-        {
-          label: "Conta/Leitura",
-          key: "_idMovimentacao",
-          format: (value) => (value ? "Conta" : "Leitura"),
-        },
-        { label: "Descrição", key: "descricao" },
-        { label: "Leitura", groupKey: ["leitura", "unidadeMedida"], key: "leitura" },
-        {
-          label: "Valor Conta Rateada / Leitura",
-          key: "valor",
-          format: (value) => formatarMoeda(value),
-        },
-      ],
-      data: values.itemsCobranca,
-      total: formatarMoeda(values.valor),
-    });
-    const blob = new Blob([pdf], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const blankWindow = window.open();
-    blankWindow.location.href = url;
   };
 
   async function onSubmit() {
@@ -372,7 +322,7 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
                       </TableCell>
                       <TableCell>{item.descricao}</TableCell>
                       <TableCell>
-                        {item._idLeitura ? item.leitura + " " + item.unidadeMedida : "-"}
+                        {`${item._idLeitura ? `${item.leitura} ${item.unidadeMedida || ""}` : "-"}`}
                       </TableCell>
                       <TableCell>{formatarMoeda(item.valor)}</TableCell>
                     </TableRow>
@@ -389,14 +339,10 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
             p: 2,
           }}
         >
-          {operation != "add" && (
-            <Button color="primary" variant="contained" onClick={handleClickImprimir}>
-              Imprimir
-            </Button>
-          )}
           {!onlyView ? (
             <>
               <Button
+                sx={{ margin: 1 }}
                 name="cancel"
                 color="error"
                 variant="contained"
@@ -404,12 +350,19 @@ export const CobrancaDetails = ({ id, operation, onlyView }) => {
               >
                 Cancelar
               </Button>
-              <Button name="save" color="primary" variant="contained" type="submit">
+              <Button
+                sx={{ margin: 1 }}
+                name="save"
+                color="primary"
+                variant="contained"
+                type="submit"
+              >
                 Salvar
               </Button>
             </>
           ) : (
             <Button
+              sx={{ margin: 1 }}
               name="back"
               color="primary"
               variant="contained"

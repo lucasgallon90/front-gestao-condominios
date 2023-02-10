@@ -22,6 +22,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
     descricao: undefined,
     situacao: "Aberta",
     respostaAdmin: undefined,
+    usuarioOcorrencia: undefined
   });
   const [moradores, setMoradores] = useState([]);
 
@@ -29,6 +30,9 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
     async function load() {
       let ocorrencia;
       if (user) {
+        if (user?.tipoUsuario != "admin") {
+          setValues({ ...values, usuarioOcorrencia: { _id: user?._id, nome: user?.nome } })
+        }
         if (operation != "add") {
           ocorrencia = await getOcorrencia();
           if (user?.tipoUsuario === "admin") {
@@ -59,14 +63,14 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
             situacao: res.data.situacao,
             respostaAdmin: res.data.respostaAdmin,
           });
-          reset({...values})
+        reset({ ...values })
         return res.data;
       })
       .catch((error) => console.log(error));
   }
 
   async function loadMoradores(nome) {
-    let filter = {ativo: true};
+    let filter = { ativo: true };
     if (nome) filter = { nome: nome, ...filter };
     return api
       .post(`usuarios/list/moradores`, filter)
@@ -124,7 +128,7 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
       ...values,
       [event.target.name]: event.target.value,
     });
-    reset({...values})
+    reset({ ...values })
   };
 
   return (
@@ -135,7 +139,9 @@ export const OcorrenciaDetails = ({ id, operation, onlyView }) => {
             <Grid item md={6} xs={12}>
               {user?.tipoUsuario != "admin" ? (
                 <TextField
-                  value={values.nome}
+                  disabled
+                  fullWidth
+                  value={values.usuarioOcorrencia?.nome}
                   variant="outlined"
                   InputLabelProps={{ shrink: true }}
                 ></TextField>

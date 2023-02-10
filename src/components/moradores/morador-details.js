@@ -18,8 +18,6 @@ export const MoradorDetails = ({ id, operation, onlyView }) => {
     apto: undefined,
     email: undefined,
     telefone: undefined,
-    state: undefined,
-    country: undefined,
   });
 
   useEffect(() => {

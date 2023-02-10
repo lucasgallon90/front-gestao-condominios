@@ -60,6 +60,21 @@ describe("Cobranças", () => {
         });
     });
 
+    it("Imprimir cobrança", () => {
+      cy.get(`[aria-label="print"]`)
+        .first()
+        .click();
+    });
+
+    it("Enviar por email cobrança", () => {
+      cy.get(`[aria-label="email"]`)
+        .first()
+        .click()
+        .then(() => {
+          cy.get(`button[id="submit-email"]`).click();
+        });
+    });
+
     it("Excluir tipo de cobranças", () => {
       cy.get(`[aria-label="delete"]`)
         .last()

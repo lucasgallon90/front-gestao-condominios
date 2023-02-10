@@ -116,7 +116,7 @@ const Moradores = () => {
             ]}
             addButtonHide
             extraButton={
-              <Button id="add" color="primary" variant="contained" onClick={handleClickConvite}>
+              <Button id="convite" name="convite" color="primary" variant="contained" onClick={handleClickConvite}>
                 Convite
               </Button>
             }

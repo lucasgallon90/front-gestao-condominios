@@ -6,7 +6,6 @@ export function printPDF({
   header = [],
   columnHead = [],
   data = [],
-  filename = "export",
   total = 0,
 }) {
   const doc = new jsPDF();

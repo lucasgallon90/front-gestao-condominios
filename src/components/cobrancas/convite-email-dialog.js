@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import api from "../../services/api";
 
-export default function DialogConviteEmail({ open, setOpen }) {
+export default function DialogCobrancaEmail({ open, setOpen, idCobranca }) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const {
@@ -26,16 +26,16 @@ export default function DialogConviteEmail({ open, setOpen }) {
   const handleClickConfirmar = () => {
     setLoading(true);
     api({
-      url: `usuarios/convite-registro-email`,
+      url: `cobrancas/enviar-email`,
       method: "post",
-      data: { email },
+      data: { id: idCobranca, email },
     })
       .then((res) => {
         toast.success(res.data.message);
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Não foi possível enviar o convite por email, tente novamente mais tarde");
+        toast.error("Não foi possível enviar a cobrança por email, tente novamente mais tarde");
       })
       .finally(() => {
         setLoading(false);
@@ -51,15 +51,14 @@ export default function DialogConviteEmail({ open, setOpen }) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <form noValidate onSubmit={handleSubmit(() => handleClickConfirmar())}>
-          <DialogTitle>Convite por email</DialogTitle>
+        <form id='form-dialog' noValidate onSubmit={handleSubmit(() => handleClickConfirmar())}>
+          <DialogTitle>Enviar cobrança para email</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Informe o email abaixo para enviar o convite de cadastro no condomínio.
+              Caso deseje enviar a cobrança para um email diferente do cadastro do morador, informe abaixo
             </DialogContentText>
             <TextField
               {...register("email", {
-                required: "Email é obrigatório",
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: "Email Inválido",
@@ -80,7 +79,7 @@ export default function DialogConviteEmail({ open, setOpen }) {
             <Button disabled={loading} onClick={handleClose}>
               Cancelar
             </Button>
-            <Button disabled={loading} type="submit" name="send">
+            <Button id='submit-email' disabled={loading} type="submit">
               {loading && <CircularProgress size={14} />}
               {!loading && "Confirmar"}
             </Button>
