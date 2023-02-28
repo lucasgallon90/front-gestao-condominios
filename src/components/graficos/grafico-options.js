@@ -1,9 +1,9 @@
-import { Route } from "@mui/icons-material";
 import {
   Box,
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Divider,
   FormControl,
   FormControlLabel,
@@ -11,13 +11,12 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  TextField,
+  TextField
 } from "@mui/material";
 import moment from "moment";
 import Router from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export const GraficoOptions = () => {
@@ -34,6 +33,7 @@ export const GraficoOptions = () => {
     dataFinal: moment().format("YYYY-MM-DD"),
     tipoGrafico: "fluxoCaixa",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
     setValues({
@@ -43,6 +43,7 @@ export const GraficoOptions = () => {
   };
 
   const onSubmit = () => {
+    setLoading(true);
     if (moment(values.dataFinal).diff(values.dataInicial, "months") > 12) {
       Swal.fire("Período deve ser menor que 12 meses", "", "warning");
       return;
@@ -119,9 +120,10 @@ export const GraficoOptions = () => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained" type="submit">
-            Gerar
-          </Button>
+          <Button disabled={loading} type="submit" name="gerar">
+              {loading && <>Gerando <CircularProgress size={14} /></>}
+              {!loading && "Gerar"}
+            </Button>
         </Box>
       </Card>
     </form>
