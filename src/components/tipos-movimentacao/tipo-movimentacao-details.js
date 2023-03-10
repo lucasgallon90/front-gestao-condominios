@@ -95,7 +95,7 @@ export const TipoMovimentacaoDetails = ({ id, operation, onlyView }) => {
                 label="Descrição"
                 name="descricao"
                 onChange={handleChange}
-                value={values.descricao}
+                value={values.descricao || ""}
                 variant="outlined"
               />
             </Grid>
